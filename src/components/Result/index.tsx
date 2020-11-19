@@ -47,8 +47,6 @@ const Result = memo(({ id, data }: IResultProps) => {
     )
   );
 
-  console.log("sorted nodes", sortedNodes);
-
   const calculateWinner = (): {
     topOptions: string[];
     score: number;
