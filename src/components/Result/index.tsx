@@ -5,7 +5,20 @@ import { IOptionData } from "../Option";
 import { CustomNode } from "../../types/CustomNode";
 import { Card } from "../Card";
 
-const ResultWrapper = styled(Card)``;
+const ResultWrapper = styled(Card)`
+  padding: 20px;
+`;
+
+const Label = styled.div`
+  font-size: 26px;
+  font-weight: bold;
+`;
+
+const Winner = styled.div`
+  font-size: 30px;
+  color: teal;
+  font-weight: bold;
+`;
 
 interface ISortedNodes {
   weightedAttributes: Node[];
@@ -82,10 +95,10 @@ const Result = memo(({ id, data }: IResultProps) => {
 
     return (
       <>
-        <strong>{winner.topOptions.length > 1 ? "Draw" : "Winner"}</strong>
+        <Label>{winner.topOptions.length > 1 ? "Draw" : "Winner"}</Label>
         <div>
           {winner.topOptions.map((option) => (
-            <div key={option}>{option}</div>
+            <Winner key={option}>{option}</Winner>
           ))}
         </div>
       </>

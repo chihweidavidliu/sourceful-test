@@ -13,11 +13,11 @@ interface IRangeInputProps extends HTMLProps<HTMLInputElement> {
 
 const RangeInput = ({ label, ...props }: IRangeInputProps) => {
   return (
-    <RangeInputWrapper>
+    <RangeInputWrapper className="nodrag">
       <div>
         {label}: <strong>{props.value}</strong>
       </div>
-      <input {...props} className="nodrag" type="range" />
+      <input {...props} type="range" />
     </RangeInputWrapper>
   );
 };

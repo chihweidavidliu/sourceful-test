@@ -8,6 +8,19 @@ import RangeInput from "../RangeInput";
 
 const OptionWrapper = styled(Card)``;
 
+const H4 = styled.h4`
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 5px;
+`;
+
+const Score = styled.div`
+  font-weight: bold;
+  color: teal;
+  font-size: 24px;
+`;
+
 export interface IOptionData {
   label: string;
   scores: {
@@ -85,8 +98,8 @@ const Option = ({ id, data }: IOptionProps) => {
             )}
 
             <div>
-              <h4>Score</h4>
-              {calculateTotalScore()}
+              <H4>Score</H4>
+              <Score>{calculateTotalScore()}</Score>
             </div>
           </>
         ) : (
