@@ -6,9 +6,7 @@ import { CustomNode } from "../../types/CustomNode";
 import { TextInput } from "../TextInput";
 import RangeInput from "../RangeInput";
 
-const OptionWrapper = styled(Card)`
-  border: 1px solid teal;
-`;
+const OptionWrapper = styled(Card)``;
 
 export interface IOptionData {
   label: string;

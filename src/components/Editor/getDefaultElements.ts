@@ -22,7 +22,7 @@ export const getDefaultElements = ({
         handleChange,
         weighting: 1,
       },
-      position: { x: 300, y: 50 },
+      position: { x: 100, y: 50 },
     },
     {
       id: "3",
@@ -35,7 +35,7 @@ export const getDefaultElements = ({
           "2": 50,
         },
       },
-      position: { x: 100, y: 400 },
+      position: { x: 400, y: 300 },
       targetPosition: Position.Top,
     },
     {
@@ -49,7 +49,7 @@ export const getDefaultElements = ({
           "2": 50,
         },
       },
-      position: { x: 400, y: 400 },
+      position: { x: 100, y: 300 },
       targetPosition: Position.Top,
     },
     {

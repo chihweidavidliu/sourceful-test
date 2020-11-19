@@ -3,14 +3,9 @@ import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
 import { IOptionData } from "../Option";
 import { CustomNode } from "../../types/CustomNode";
+import { Card } from "../Card";
 
-const ResultWrapper = styled.div`
-  min-width: 120px;
-  padding: 10px;
-  display: grid;
-  grid-gap: 10px;
-  border: 1px solid lightgrey;
-`;
+const ResultWrapper = styled(Card)``;
 
 interface ISortedNodes {
   weightedAttributes: Node[];
@@ -86,14 +81,14 @@ const Result = memo(({ id, data }: IResultProps) => {
     }
 
     return (
-      <div>
-        {winner.topOptions.length > 1 ? "Draw" : "Winner"}
+      <>
+        <strong>{winner.topOptions.length > 1 ? "Draw" : "Winner"}</strong>
         <div>
           {winner.topOptions.map((option) => (
             <div key={option}>{option}</div>
           ))}
         </div>
-      </div>
+      </>
     );
   };
 

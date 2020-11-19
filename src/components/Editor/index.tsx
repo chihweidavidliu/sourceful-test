@@ -5,6 +5,7 @@ import ReactFlow, {
   Edge,
   removeElements,
   Elements,
+  Node,
   addEdge,
   Connection,
   Position,
@@ -128,6 +129,11 @@ const Editor = () => {
 
   const addOption = () => {
     const id = shortid.generate();
+
+    const lastOption = elements.find(
+      (element) => element.type === CustomNode.OPTION
+    ) as Node;
+
     const newOption: IOptionProps = {
       id: id,
       type: CustomNode.OPTION,
@@ -137,11 +143,14 @@ const Editor = () => {
         setAttributeScore,
         scores: {},
       },
-      position: { x: 400, y: 400 },
+      position: {
+        x: lastOption ? lastOption.position.x + 300 : 100,
+        y: lastOption ? lastOption.position.y : 300,
+      },
       targetPosition: Position.Top,
     };
 
-    setElements((elements) => [...elements, newOption]);
+    setElements((elements) => [newOption, ...elements]);
     // add edges
     const newEdges: Edge[] = elements
       .filter(
@@ -178,6 +187,11 @@ const Editor = () => {
 
   const addWeightedAttribute = () => {
     const id = shortid.generate();
+
+    const lastWeightedAttribute = elements.find(
+      (element) => element.type === CustomNode.WEIGHTED_ATTRIBUTE
+    ) as Node;
+
     const newAttribute: IWeightedAttributeProps = {
       id,
       type: CustomNode.WEIGHTED_ATTRIBUTE,
@@ -186,10 +200,15 @@ const Editor = () => {
         handleChange,
         weighting: 1,
       },
-      position: { x: 300, y: 50 },
+      position: {
+        x: lastWeightedAttribute
+          ? lastWeightedAttribute?.position.x + 300
+          : 100,
+        y: lastWeightedAttribute ? lastWeightedAttribute?.position.y : 50,
+      },
     };
 
-    setElements((elements) => [...elements, newAttribute]);
+    setElements((elements) => [newAttribute, ...elements]);
 
     // add edges
     const options = elements.filter(
@@ -223,6 +242,7 @@ const Editor = () => {
           deleteKeyCode={8} /* 'delete'-key */
           snapToGrid={true}
           snapGrid={[15, 15]}
+          defaultZoom={0.8}
         >
           <Background color="#aaa" gap={16} />
         </ReactFlow>
