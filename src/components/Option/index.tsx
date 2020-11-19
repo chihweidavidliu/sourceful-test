@@ -63,27 +63,35 @@ const Option = ({ id, data }: IOptionProps) => {
       />
 
       <div>
-        {weightedAttributes.map(({ id: attributeId, data: attributeData }) => {
-          const score = scores[attributeId] || 0;
-          return (
-            <RangeInput
-              label={attributeData.label}
-              key={attributeId}
-              name={attributeId}
-              min={0}
-              max={100}
-              value={score}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setAttributeScore(id, e);
-              }}
-            />
-          );
-        })}
-      </div>
+        {weightedAttributes.length ? (
+          <>
+            {weightedAttributes.map(
+              ({ id: attributeId, data: attributeData }) => {
+                const score = scores[attributeId] || 0;
+                return (
+                  <RangeInput
+                    label={attributeData.label}
+                    key={attributeId}
+                    name={attributeId}
+                    min={0}
+                    max={100}
+                    value={score}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setAttributeScore(id, e);
+                    }}
+                  />
+                );
+              }
+            )}
 
-      <div>
-        <h4>Score</h4>
-        {calculateTotalScore()}
+            <div>
+              <h4>Score</h4>
+              {calculateTotalScore()}
+            </div>
+          </>
+        ) : (
+          <div>Please Add Attributes</div>
+        )}
       </div>
 
       <Handle

@@ -77,7 +77,7 @@ const Result = memo(({ id, data }: IResultProps) => {
 
   const renderResult = () => {
     if (!winner) {
-      return;
+      return <div>Insufficient Data</div>;
     }
 
     return (
