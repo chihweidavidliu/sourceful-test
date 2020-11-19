@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import styled from "styled-components";
-import { Handle, Position, Node } from "react-flow-renderer";
+import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
+import { IOptionData } from "../Option";
 
 const ResultWrapper = styled.div`
   min-width: 120px;
@@ -9,6 +10,11 @@ const ResultWrapper = styled.div`
   grid-gap: 10px;
   border: 1px solid lightgrey;
 `;
+
+interface ISortedNodes {
+  weightedAttributes: Node[];
+  options: Node[];
+}
 
 interface IResultData {
   label: string;
@@ -19,6 +25,77 @@ interface IResultProps extends Node {
 }
 
 const Result = memo(({ id, data }: IResultProps) => {
+  const sortedNodes = useStoreState((state) =>
+    state.nodes.reduce(
+      (result: ISortedNodes, node: Node) => {
+        switch (node.type) {
+          case "option":
+            result.options.push(node);
+            return result;
+          case "weightingInput":
+            result.weightedAttributes.push(node);
+            return result;
+          default:
+            return result;
+        }
+      },
+      {
+        weightedAttributes: [],
+        options: [],
+      }
+    )
+  );
+
+  const calculateWinner = (): {
+    topOptions: string[];
+    score: number;
+  } | null => {
+    let winner: { topOptions: string[]; score: number } | null = null;
+
+    sortedNodes.options.forEach((option) => {
+      const score = calculateTotalScore(option.data);
+
+      if (!winner || winner?.score < score) {
+        winner = { topOptions: [option.data.label], score };
+      } else if (winner?.score === score) {
+        winner.topOptions.push(option.data.label);
+      }
+    });
+
+    return winner;
+  };
+
+  const calculateTotalScore = (optionData: IOptionData) => {
+    const { scores } = optionData;
+
+    const total = sortedNodes.weightedAttributes.reduce((total, attribute) => {
+      const score = scores[attribute.id] || 0;
+      const subscore = attribute.data.weighting * score;
+      return total + subscore;
+    }, 0);
+
+    return total;
+  };
+
+  const winner = calculateWinner();
+
+  const renderResult = () => {
+    if (!winner) {
+      return;
+    }
+
+    return (
+      <div>
+        {winner.topOptions.length > 1 ? "Draw" : "Winner"}
+        <div>
+          {winner.topOptions.map((option) => (
+            <div key={option}>{option}</div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <ResultWrapper>
       <Handle
@@ -27,7 +104,7 @@ const Result = memo(({ id, data }: IResultProps) => {
         id="a"
         style={{ top: -5, background: "#555" }}
       />
-      <div>Result</div>
+      {renderResult()}
     </ResultWrapper>
   );
 });

@@ -10,7 +10,7 @@ const OptionWrapper = styled.div`
   border: 1px solid teal;
 `;
 
-interface IOptionData {
+export interface IOptionData {
   label: string;
   scores: {
     [attributeId: string]: number;
@@ -34,13 +34,9 @@ const Option = ({ id, data }: IOptionProps) => {
 
   const nodes = useStoreState((state) => state.nodes);
 
-  console.log("nodes", nodes);
-
   const weightedAttributes = nodes.filter(
     (node) => node.type === "weightingInput"
   );
-
-  console.log("scores", scores);
 
   const calculateTotalScore = () => {
     const total = weightedAttributes.reduce((total, attribute) => {
