@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Handle, Position, Node } from "react-flow-renderer";
 import { Card } from "../Card";
@@ -17,7 +17,7 @@ export interface IWeightedAttributeProps extends Node {
   data: IWeightedAttributeData;
 }
 
-const WeightedAttribute = memo(({ id, data }: IWeightedAttributeProps) => {
+const WeightedAttribute = ({ id, data }: IWeightedAttributeProps) => {
   const { handleChange } = data;
   return (
     <WeightedAttributeWrapper>
@@ -52,6 +52,6 @@ const WeightedAttribute = memo(({ id, data }: IWeightedAttributeProps) => {
       />
     </WeightedAttributeWrapper>
   );
-});
+};
 
 export default WeightedAttribute;

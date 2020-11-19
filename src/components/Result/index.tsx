@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
 import { IOptionData } from "../Option";
@@ -33,7 +33,7 @@ interface IResultProps extends Node {
   data: IResultData;
 }
 
-const Result = memo(({ id, data }: IResultProps) => {
+const Result = ({ id, data }: IResultProps) => {
   const sortedNodes = useStoreState((state) =>
     state.nodes.reduce(
       (result: ISortedNodes, node: Node) => {
@@ -116,6 +116,6 @@ const Result = memo(({ id, data }: IResultProps) => {
       {renderResult()}
     </ResultWrapper>
   );
-});
+};
 
 export default Result;
