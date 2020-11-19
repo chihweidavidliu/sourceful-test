@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
+import { CustomNode } from "../../types/CustomNode";
 
 const OptionWrapper = styled.div`
   min-width: 100px;
@@ -35,7 +36,7 @@ const Option = ({ id, data }: IOptionProps) => {
   const nodes = useStoreState((state) => state.nodes);
 
   const weightedAttributes = nodes.filter(
-    (node) => node.type === "weightingInput"
+    (node) => node.type === CustomNode.WEIGHTED_ATTRIBUTE
   );
 
   const calculateTotalScore = () => {

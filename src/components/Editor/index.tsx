@@ -11,9 +11,10 @@ import ReactFlow, {
   isEdge,
 } from "react-flow-renderer";
 import styled from "styled-components";
-import WeightingInput from "../WeightingInput";
+import WeightedAttribute from "../WeightedAttribute";
 import Option from "../Option";
 import Result from "../Result";
+import { CustomNode } from "../../types/CustomNode";
 
 const EditorWrapper = styled.div`
   height: 80vh;
@@ -21,9 +22,9 @@ const EditorWrapper = styled.div`
 `;
 
 const nodeTypes = {
-  weightingInput: WeightingInput,
-  option: Option,
-  result: Result,
+  [CustomNode.WEIGHTED_ATTRIBUTE]: WeightedAttribute,
+  [CustomNode.OPTION]: Option,
+  [CustomNode.RESULT]: Result,
 };
 
 const Editor = () => {
@@ -75,9 +76,6 @@ const Editor = () => {
           return element;
         }
 
-        console.log("element", element);
-        console.log("e.target.name", event.target.name);
-
         return {
           ...element,
           data: {
@@ -96,7 +94,7 @@ const Editor = () => {
     setElements([
       {
         id: "2",
-        type: "weightingInput",
+        type: CustomNode.WEIGHTED_ATTRIBUTE,
         data: {
           label: "New Attribute",
           handleWeightingChange,
@@ -108,7 +106,7 @@ const Editor = () => {
       },
       {
         id: "3",
-        type: "option",
+        type: CustomNode.OPTION,
         data: {
           label: "Option 1",
           setAttributeScore,
@@ -122,7 +120,7 @@ const Editor = () => {
       },
       {
         id: "4",
-        type: "option",
+        type: CustomNode.OPTION,
         data: {
           label: "Option 2",
           setAttributeScore,
@@ -136,7 +134,7 @@ const Editor = () => {
       },
       {
         id: "5",
-        type: "result",
+        type: CustomNode.RESULT,
         data: {
           label: "Result",
           scores: {
@@ -185,17 +183,17 @@ const Editor = () => {
   }, []);
 
   const onElementsRemove = (elementsToRemove: Elements) => {
-    const weightingInput = elementsToRemove.find(
-      (element) => element?.type === "weightingInput"
+    const weightedAttribute = elementsToRemove.find(
+      (element) => element?.type === CustomNode.WEIGHTED_ATTRIBUTE
     );
-    if (weightingInput) {
+    if (weightedAttribute) {
       // remove attribute from all option nodes
       setElements((elements) =>
         elements.map((element) => {
-          if (element.type === "option") {
+          if (element.type === CustomNode.OPTION) {
             const updatedWeightings = omit(
               element.data.weightings,
-              weightingInput.id
+              weightedAttribute.id
             );
             return {
               ...element,
@@ -221,7 +219,7 @@ const Editor = () => {
     const id = shortid.generate();
     const newOption = {
       id: id,
-      type: "option",
+      type: CustomNode.OPTION,
       data: {
         label: "New Option",
         setAttributeScore,
@@ -237,10 +235,11 @@ const Editor = () => {
     const newEdges: Edge[] = elements
       .filter(
         (element) =>
-          element.type === "weightingInput" || element.type === "result"
+          element.type === CustomNode.WEIGHTED_ATTRIBUTE ||
+          element.type === CustomNode.RESULT
       )
       .map((element) => {
-        if (element.type === "weightingInput") {
+        if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
           return {
             id: shortid.generate(),
             source: element.id,
@@ -270,7 +269,7 @@ const Editor = () => {
     const id = shortid.generate();
     const newAttribute = {
       id,
-      type: "weightingInput",
+      type: CustomNode.WEIGHTED_ATTRIBUTE,
       data: {
         label: "New Attribute",
         handleWeightingChange,
@@ -284,7 +283,9 @@ const Editor = () => {
     setElements((elements) => [...elements, newAttribute]);
 
     // add edges
-    const options = elements.filter((element) => element.type === "option");
+    const options = elements.filter(
+      (element) => element.type === CustomNode.OPTION
+    );
     const newEdges = options.map((option) => {
       return {
         id: shortid.generate(),

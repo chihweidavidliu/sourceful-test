@@ -1,0 +1,5 @@
+export enum CustomNode {
+  WEIGHTED_ATTRIBUTE = "WEIGHTED_ATTRIBUTE",
+  OPTION = "OPTION",
+  RESULT = "RESULT",
+}

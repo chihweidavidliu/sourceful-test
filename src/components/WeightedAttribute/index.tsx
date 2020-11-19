@@ -26,7 +26,7 @@ interface IWeightingInputProps extends Node {
   data: IWeightingInputData;
 }
 
-const WeightingInput = memo(({ id, data }: IWeightingInputProps) => {
+const WeightedAttribute = memo(({ id, data }: IWeightingInputProps) => {
   return (
     <WeightingInputWrapper>
       <input
@@ -61,4 +61,4 @@ const WeightingInput = memo(({ id, data }: IWeightingInputProps) => {
   );
 });
 
-export default WeightingInput;
+export default WeightedAttribute;

@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
 import { IOptionData } from "../Option";
+import { CustomNode } from "../../types/CustomNode";
 
 const ResultWrapper = styled.div`
   min-width: 120px;
@@ -29,10 +30,10 @@ const Result = memo(({ id, data }: IResultProps) => {
     state.nodes.reduce(
       (result: ISortedNodes, node: Node) => {
         switch (node.type) {
-          case "option":
+          case CustomNode.OPTION:
             result.options.push(node);
             return result;
-          case "weightingInput":
+          case CustomNode.WEIGHTED_ATTRIBUTE:
             result.weightedAttributes.push(node);
             return result;
           default:
@@ -45,6 +46,8 @@ const Result = memo(({ id, data }: IResultProps) => {
       }
     )
   );
+
+  console.log("sorted nodes", sortedNodes);
 
   const calculateWinner = (): {
     topOptions: string[];
