@@ -2,10 +2,7 @@ import { Position } from "react-flow-renderer";
 import { CustomNode } from "../../types/CustomNode";
 
 interface IGetDefaultElementsArgs {
-  handleWeightingChange: (
-    id: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
+  handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
   handleLabelChange: (
     id: string,
     e: React.ChangeEvent<HTMLInputElement>
@@ -17,8 +14,8 @@ interface IGetDefaultElementsArgs {
 }
 
 export const getDefaultElements = ({
+  handleChange,
   handleLabelChange,
-  handleWeightingChange,
   setAttributeScore,
 }: IGetDefaultElementsArgs) => {
   return [
@@ -27,8 +24,7 @@ export const getDefaultElements = ({
       type: CustomNode.WEIGHTED_ATTRIBUTE,
       data: {
         label: "New Attribute",
-        handleWeightingChange,
-        handleLabelChange,
+        handleChange,
         weighting: 1,
       },
       style: { border: "1px solid #777", padding: 10 },
@@ -39,6 +35,7 @@ export const getDefaultElements = ({
       type: CustomNode.OPTION,
       data: {
         label: "Option 1",
+        handleChange,
         setAttributeScore,
         handleLabelChange,
         scores: {
@@ -53,6 +50,7 @@ export const getDefaultElements = ({
       type: CustomNode.OPTION,
       data: {
         label: "Option 2",
+        handleChange,
         setAttributeScore,
         handleLabelChange,
         scores: {

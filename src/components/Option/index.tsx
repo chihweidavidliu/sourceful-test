@@ -16,6 +16,7 @@ export interface IOptionData {
   scores: {
     [attributeId: string]: number;
   };
+  handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
   setAttributeScore: (
     id: string,
     e: React.ChangeEvent<HTMLInputElement>
@@ -26,7 +27,7 @@ export interface IOptionData {
   ) => void;
 }
 
-interface IOptionProps extends Node {
+export interface IOptionProps extends Node {
   data: IOptionData;
 }
 

@@ -16,6 +16,8 @@ import Option from "../Option";
 import Result from "../Result";
 import { CustomNode } from "../../types/CustomNode";
 import { getDefaultElements } from "./getDefaultElements";
+import { IOptionProps } from "../Option";
+import { IWeightedAttributeProps } from "../WeightedAttribute";
 
 const EditorWrapper = styled.div`
   height: 80vh;
@@ -30,6 +32,27 @@ const nodeTypes = {
 
 const Editor = () => {
   const [elements, setElements] = useState<Elements>([]);
+
+  const handleChange = (
+    id: string,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setElements((els) =>
+      els.map((e) => {
+        if (isEdge(e) || e.id !== id) {
+          return e;
+        }
+        const { name, value } = event.target;
+        return {
+          ...e,
+          data: {
+            ...e.data,
+            [name]: value,
+          },
+        };
+      })
+    );
+  };
 
   const handleWeightingChange = (id: string, event: any) => {
     setElements((els) =>
@@ -94,7 +117,7 @@ const Editor = () => {
   useEffect(() => {
     setElements(
       getDefaultElements({
-        handleWeightingChange,
+        handleChange,
         handleLabelChange,
         setAttributeScore,
       })
@@ -136,11 +159,12 @@ const Editor = () => {
 
   const addOption = () => {
     const id = shortid.generate();
-    const newOption = {
+    const newOption: IOptionProps = {
       id: id,
       type: CustomNode.OPTION,
       data: {
         label: "New Option",
+        handleChange,
         setAttributeScore,
         handleLabelChange,
         scores: {},
@@ -186,13 +210,12 @@ const Editor = () => {
 
   const addWeightedAttribute = () => {
     const id = shortid.generate();
-    const newAttribute = {
+    const newAttribute: IWeightedAttributeProps = {
       id,
       type: CustomNode.WEIGHTED_ATTRIBUTE,
       data: {
         label: "New Attribute",
-        handleWeightingChange,
-        handleLabelChange,
+        handleChange,
         weighting: 1,
       },
       style: { border: "1px solid #777", padding: 10 },
