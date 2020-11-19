@@ -15,12 +15,13 @@ interface IWeightedAttributeData {
 
 export interface IWeightedAttributeProps extends Node {
   data: IWeightedAttributeData;
+  selected?: boolean;
 }
 
-const WeightedAttribute = ({ id, data }: IWeightedAttributeProps) => {
+const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
   const { handleChange } = data;
   return (
-    <WeightedAttributeWrapper>
+    <WeightedAttributeWrapper isSelected={selected}>
       <TextInput
         className="nodrag"
         type="text"

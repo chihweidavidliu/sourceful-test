@@ -20,10 +20,15 @@ import { CustomNode } from "../../types/CustomNode";
 import { getDefaultElements } from "./getDefaultElements";
 import { IOptionProps } from "../Option";
 import { IWeightedAttributeProps } from "../WeightedAttribute";
+import { Button, ButtonGroup } from "../Button";
 
 const EditorWrapper = styled.div`
-  height: 80vh;
+  height: 95vh;
   border: 1px solid lightgrey;
+`;
+
+const Toolbar = styled.div`
+  height: 15vh;
 `;
 
 const nodeTypes = {
@@ -95,6 +100,14 @@ const Editor = () => {
   }, []);
 
   const onElementsRemove = (elementsToRemove: Elements) => {
+    const resultNode = elementsToRemove.find(
+      (element) => element?.type === CustomNode.RESULT
+    );
+
+    if (resultNode) {
+      return alert("Cannot delete result node");
+    }
+
     const weightedAttribute = elementsToRemove.find(
       (element) => element?.type === CustomNode.WEIGHTED_ATTRIBUTE
     );
@@ -230,9 +243,15 @@ const Editor = () => {
   };
 
   return (
-    <div>
-      <button onClick={addWeightedAttribute}>Add Attribute</button>
-      <button onClick={addOption}>Add Option</button>
+    <>
+      <Toolbar>
+        <h1>Decision Maker</h1>
+        <ButtonGroup>
+          <Button onClick={addWeightedAttribute}>Add Attribute</Button>
+          <Button onClick={addOption}>Add Option</Button>
+        </ButtonGroup>
+      </Toolbar>
+
       <EditorWrapper>
         <ReactFlow
           nodeTypes={nodeTypes}
@@ -247,7 +266,7 @@ const Editor = () => {
           <Background color="#aaa" gap={16} />
         </ReactFlow>
       </EditorWrapper>
-    </div>
+    </>
   );
 };
 

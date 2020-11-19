@@ -31,9 +31,10 @@ interface IResultData {
 
 interface IResultProps extends Node {
   data: IResultData;
+  selected?: boolean;
 }
 
-const Result = ({ id, data }: IResultProps) => {
+const Result = ({ selected }: IResultProps) => {
   const sortedNodes = useStoreState((state) =>
     state.nodes.reduce(
       (result: ISortedNodes, node: Node) => {
@@ -106,7 +107,7 @@ const Result = ({ id, data }: IResultProps) => {
   };
 
   return (
-    <ResultWrapper>
+    <ResultWrapper isSelected={selected}>
       <Handle
         type="target"
         position={Position.Top}

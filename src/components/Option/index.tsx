@@ -35,9 +35,10 @@ export interface IOptionData {
 
 export interface IOptionProps extends Node {
   data: IOptionData;
+  selected?: boolean;
 }
 
-const Option = ({ id, data }: IOptionProps) => {
+const Option = ({ id, data, selected }: IOptionProps) => {
   const { scores, handleChange, setAttributeScore } = data;
 
   const nodes = useStoreState((state) => state.nodes);
@@ -57,7 +58,7 @@ const Option = ({ id, data }: IOptionProps) => {
   };
 
   return (
-    <OptionWrapper>
+    <OptionWrapper isSelected={selected}>
       <Handle
         type="target"
         position={Position.Top}
