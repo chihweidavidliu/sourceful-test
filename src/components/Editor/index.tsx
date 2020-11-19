@@ -8,6 +8,7 @@ import ReactFlow, {
   addEdge,
   Connection,
   Position,
+  Background,
   isEdge,
 } from "react-flow-renderer";
 import styled from "styled-components";
@@ -185,7 +186,6 @@ const Editor = () => {
         handleChange,
         weighting: 1,
       },
-      style: { border: "1px solid #777", padding: 10 },
       position: { x: 300, y: 50 },
     };
 
@@ -221,7 +221,11 @@ const Editor = () => {
           onElementsRemove={onElementsRemove}
           onConnect={onConnect}
           deleteKeyCode={8} /* 'delete'-key */
-        />
+          snapToGrid={true}
+          snapGrid={[15, 15]}
+        >
+          <Background color="#aaa" gap={16} />
+        </ReactFlow>
       </EditorWrapper>
     </div>
   );

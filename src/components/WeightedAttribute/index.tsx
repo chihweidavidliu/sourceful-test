@@ -1,13 +1,11 @@
 import React, { memo } from "react";
 import styled from "styled-components";
 import { Handle, Position, Node } from "react-flow-renderer";
+import { Card } from "../Card";
+import { TextInput } from "../TextInput";
+import RangeInput from "../RangeInput";
 
-const WeightedAttributeWrapper = styled.div`
-  min-width: 120px;
-  padding: 10px;
-  display: grid;
-  grid-gap: 10px;
-`;
+const WeightedAttributeWrapper = styled(Card)``;
 
 interface IWeightedAttributeData {
   label: string;
@@ -23,29 +21,28 @@ const WeightedAttribute = memo(({ id, data }: IWeightedAttributeProps) => {
   const { handleChange } = data;
   return (
     <WeightedAttributeWrapper>
-      <input
+      <TextInput
         className="nodrag"
         type="text"
         placeholder="Enter attribute name"
         value={data.label}
         name="label"
-        onChange={(e) => handleChange(id, e)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          handleChange(id, e)
+        }
       />
-      <div>
-        <div>
-          Weighting <strong>{data.weighting}</strong>
-        </div>
-        <input
-          className="nodrag"
-          type="range"
-          min={0}
-          step="0.1"
-          max={1}
-          name="weighting"
-          onChange={(e) => handleChange(id, e)}
-          value={data.weighting}
-        />
-      </div>
+
+      <RangeInput
+        label="Weighting"
+        min={0}
+        step="0.1"
+        max={1}
+        name="weighting"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          handleChange(id, e)
+        }
+        value={data.weighting}
+      />
 
       <Handle
         type="source"

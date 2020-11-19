@@ -22,7 +22,6 @@ export const getDefaultElements = ({
         handleChange,
         weighting: 1,
       },
-      style: { border: "1px solid #777", padding: 10 },
       position: { x: 300, y: 50 },
     },
     {

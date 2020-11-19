@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
+import { Card } from "../Card";
 import { CustomNode } from "../../types/CustomNode";
+import { TextInput } from "../TextInput";
+import RangeInput from "../RangeInput";
 
-const OptionWrapper = styled.div`
-  min-width: 100px;
-  padding: 10px;
-  display: grid;
-  grid-gap: 10px;
+const OptionWrapper = styled(Card)`
   border: 1px solid teal;
 `;
 
@@ -54,35 +53,32 @@ const Option = ({ id, data }: IOptionProps) => {
         id="a"
         style={{ top: -5, background: "#555" }}
       />
-      <input
+      <TextInput
         className="nodrag"
         type="text"
         placeholder="Enter option name"
         value={data.label}
         name="label"
-        onChange={(e) => handleChange(id, e)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          handleChange(id, e)
+        }
       />
 
       <div>
         {weightedAttributes.map(({ id: attributeId, data: attributeData }) => {
           const score = scores[attributeId] || 0;
           return (
-            <div key={attributeId}>
-              <div>
-                {attributeData.label} ({score}/100)
-              </div>
-              <input
-                className="nodrag"
-                name={attributeId}
-                type="range"
-                min={0}
-                max={100}
-                value={score}
-                onChange={(e) => {
-                  setAttributeScore(id, e);
-                }}
-              />
-            </div>
+            <RangeInput
+              label={attributeData.label}
+              key={attributeId}
+              name={attributeId}
+              min={0}
+              max={100}
+              value={score}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setAttributeScore(id, e);
+              }}
+            />
           );
         })}
       </div>
