@@ -13,6 +13,7 @@ import ReactFlow, {
 import styled from "styled-components";
 import WeightingInput from "../WeightingInput";
 import Option from "../Option";
+import ts from "typescript";
 
 const EditorWrapper = styled.div`
   height: 80vh;
@@ -108,7 +109,7 @@ const Editor = () => {
         id: "3",
         type: "option",
         data: {
-          label: "Option A",
+          label: "Option 1",
           setAttributeScore,
           handleLabelChange,
           scores: {
@@ -122,7 +123,7 @@ const Editor = () => {
         id: "4",
         type: "option",
         data: {
-          label: "Option B",
+          label: "Option 2",
           setAttributeScore,
           handleLabelChange,
           scores: {
@@ -153,7 +154,6 @@ const Editor = () => {
   }, []);
 
   const onElementsRemove = (elementsToRemove: Elements) => {
-    console.log("elements to remove", elementsToRemove);
     const weightingInput = elementsToRemove.find(
       (element) => element?.type === "weightingInput"
     );
@@ -179,11 +179,46 @@ const Editor = () => {
         })
       );
     }
+
     setElements((els) => removeElements(elementsToRemove, els));
   };
 
   const onConnect = (params: Edge | Connection) =>
     setElements((els) => addEdge(params, els));
+
+  const addOption = () => {
+    const id = shortid.generate();
+    const newOption = {
+      id: id,
+      type: "option",
+      data: {
+        label: "New Option",
+        setAttributeScore,
+        handleLabelChange,
+        scores: {},
+      },
+      position: { x: 400, y: 400 },
+      targetPosition: Position.Top,
+    };
+
+    setElements((elements) => [...elements, newOption]);
+    // add edges
+    const newEdges: Edge[] = elements
+      .filter((element) => element.type === "weightingInput") // TODO: result node connection
+      .map((element) => {
+        return {
+          id: shortid.generate(),
+          source: element.id,
+          target: newOption.id,
+          sourceHandle: "a",
+          targetHandle: "a",
+          animated: true,
+          style: { stroke: "teal" },
+        };
+      });
+
+    setElements((elements) => [...elements, ...newEdges]);
+  };
 
   const addWeightedAttribute = () => {
     const id = shortid.generate();
@@ -221,7 +256,8 @@ const Editor = () => {
 
   return (
     <div>
-      <button onClick={addWeightedAttribute}>Add Input</button>
+      <button onClick={addWeightedAttribute}>Add Attribute</button>
+      <button onClick={addOption}>Add Option</button>
       <EditorWrapper>
         <ReactFlow
           nodeTypes={nodeTypes}

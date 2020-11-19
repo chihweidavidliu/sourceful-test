@@ -49,7 +49,7 @@ const Option = ({ id, data }: IOptionProps) => {
       return total + subscore;
     }, 0);
 
-    return total;
+    return total.toFixed(1);
   };
 
   return (
