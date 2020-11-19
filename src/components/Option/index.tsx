@@ -21,10 +21,6 @@ export interface IOptionData {
     id: string,
     e: React.ChangeEvent<HTMLInputElement>
   ) => void;
-  handleLabelChange: (
-    id: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
 }
 
 export interface IOptionProps extends Node {
@@ -32,7 +28,7 @@ export interface IOptionProps extends Node {
 }
 
 const Option = ({ id, data }: IOptionProps) => {
-  const { scores } = data;
+  const { scores, handleChange, setAttributeScore } = data;
 
   const nodes = useStoreState((state) => state.nodes);
 
@@ -63,7 +59,8 @@ const Option = ({ id, data }: IOptionProps) => {
         type="text"
         placeholder="Enter option name"
         value={data.label}
-        onChange={(e) => data.handleLabelChange(id, e)}
+        name="label"
+        onChange={(e) => handleChange(id, e)}
       />
 
       <div>
@@ -82,7 +79,7 @@ const Option = ({ id, data }: IOptionProps) => {
                 max={100}
                 value={score}
                 onChange={(e) => {
-                  data.setAttributeScore(id, e);
+                  setAttributeScore(id, e);
                 }}
               />
             </div>

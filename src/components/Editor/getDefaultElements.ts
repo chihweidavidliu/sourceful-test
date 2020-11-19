@@ -3,10 +3,6 @@ import { CustomNode } from "../../types/CustomNode";
 
 interface IGetDefaultElementsArgs {
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleLabelChange: (
-    id: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
   setAttributeScore: (
     id: string,
     e: React.ChangeEvent<HTMLInputElement>
@@ -15,7 +11,6 @@ interface IGetDefaultElementsArgs {
 
 export const getDefaultElements = ({
   handleChange,
-  handleLabelChange,
   setAttributeScore,
 }: IGetDefaultElementsArgs) => {
   return [
@@ -37,7 +32,6 @@ export const getDefaultElements = ({
         label: "Option 1",
         handleChange,
         setAttributeScore,
-        handleLabelChange,
         scores: {
           "2": 50,
         },
@@ -52,7 +46,6 @@ export const getDefaultElements = ({
         label: "Option 2",
         handleChange,
         setAttributeScore,
-        handleLabelChange,
         scores: {
           "2": 50,
         },

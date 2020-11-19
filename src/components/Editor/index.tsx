@@ -54,42 +54,6 @@ const Editor = () => {
     );
   };
 
-  const handleWeightingChange = (id: string, event: any) => {
-    setElements((els) =>
-      els.map((e) => {
-        if (isEdge(e) || e.id !== id) {
-          return e;
-        }
-        const weighting = event.target.value;
-        return {
-          ...e,
-          data: {
-            ...e.data,
-            weighting,
-          },
-        };
-      })
-    );
-  };
-
-  const handleLabelChange = (id: string, event: any) => {
-    setElements((els) =>
-      els.map((e) => {
-        if (isEdge(e) || e.id !== id) {
-          return e;
-        }
-        const label = event.target.value;
-        return {
-          ...e,
-          data: {
-            ...e.data,
-            label,
-          },
-        };
-      })
-    );
-  };
-
   const setAttributeScore = (
     id: string,
     event: React.ChangeEvent<HTMLInputElement>
@@ -100,14 +64,19 @@ const Editor = () => {
           return element;
         }
 
+        const attributeId = event.target.name;
+        const attributeScore = event.target.value;
+
+        const updatedScores = {
+          ...element.data.scores,
+          [attributeId]: attributeScore,
+        };
+
         return {
           ...element,
           data: {
             ...element.data,
-            scores: {
-              ...element.data.scores,
-              [event.target.name]: event.target.value,
-            },
+            scores: updatedScores,
           },
         };
       })
@@ -118,7 +87,6 @@ const Editor = () => {
     setElements(
       getDefaultElements({
         handleChange,
-        handleLabelChange,
         setAttributeScore,
       })
     );
@@ -166,7 +134,6 @@ const Editor = () => {
         label: "New Option",
         handleChange,
         setAttributeScore,
-        handleLabelChange,
         scores: {},
       },
       position: { x: 400, y: 400 },
