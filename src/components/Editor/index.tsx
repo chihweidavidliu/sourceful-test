@@ -67,26 +67,22 @@ const Editor = () => {
     id: string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    event.stopPropagation();
-    // console.log("id", id);
-    // console.log("e.target", event.target.name);
-
     setElements((els) =>
-      els.map((e) => {
-        if (isEdge(e) || e.id !== id) {
-          return e;
+      els.map((element) => {
+        if (isEdge(element) || element.id !== id) {
+          return element;
         }
 
+        console.log("element", element);
+        console.log("e.target.name", event.target.name);
+
         return {
-          ...e,
+          ...element,
           data: {
-            ...e.data,
-            weightings: {
-              ...e.data.weightings,
-              [event.target.name]: {
-                ...e.data.weightings[event.target.name],
-                weighting: event.target.value,
-              },
+            ...element.data,
+            scores: {
+              ...element.data.scores,
+              [event.target.name]: event.target.value,
             },
           },
         };
@@ -115,8 +111,8 @@ const Editor = () => {
           label: "Option A",
           setAttributeScore,
           handleLabelChange,
-          weightings: {
-            "2": { attributeName: "New Attribute", weighting: 10 },
+          scores: {
+            "2": 50,
           },
         },
         position: { x: 100, y: 400 },
@@ -129,8 +125,8 @@ const Editor = () => {
           label: "Option B",
           setAttributeScore,
           handleLabelChange,
-          weightings: {
-            "2": { attributeName: "New Attribute", weighting: 10 },
+          scores: {
+            "2": 50,
           },
         },
         position: { x: 400, y: 400 },
@@ -195,7 +191,7 @@ const Editor = () => {
       id,
       type: "weightingInput",
       data: {
-        label: `New Attribute ${id}`,
+        label: "New Attribute",
         handleWeightingChange,
         handleLabelChange,
         weighting: 1,
@@ -204,26 +200,7 @@ const Editor = () => {
       position: { x: 300, y: 50 },
     };
 
-    setElements((elements) => {
-      const updatedElements = elements.map((element) => {
-        // add new attribute to options nodes
-        if (element.type === "option") {
-          return {
-            ...element,
-            data: {
-              ...element.data,
-              weightings: {
-                ...element.data.weightings,
-                [id]: { attributeName: newAttribute.data.label, weighting: 10 },
-              },
-            },
-          };
-        }
-        return element;
-      });
-
-      return [...updatedElements, newAttribute];
-    });
+    setElements((elements) => [...elements, newAttribute]);
 
     // add edges
     const options = elements.filter((element) => element.type === "option");

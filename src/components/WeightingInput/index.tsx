@@ -30,6 +30,7 @@ const WeightingInput = memo(({ id, data }: IWeightingInputProps) => {
   return (
     <WeightingInputWrapper>
       <input
+        className="nodrag"
         type="text"
         placeholder="Enter attribute name"
         value={data.label}
@@ -46,7 +47,7 @@ const WeightingInput = memo(({ id, data }: IWeightingInputProps) => {
           step="0.1"
           max={1}
           onChange={(e) => data.handleWeightingChange(id, e)}
-          defaultValue={0}
+          value={data.weighting}
         />
       </div>
 

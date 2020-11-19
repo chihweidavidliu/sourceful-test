@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Handle, Position, Node } from "react-flow-renderer";
+import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
 
 const OptionWrapper = styled.div`
   min-width: 100px;
@@ -12,11 +12,8 @@ const OptionWrapper = styled.div`
 
 interface IOptionData {
   label: string;
-  weightings: {
-    [attributeId: string]: {
-      attributeName: string;
-      weighting: number;
-    };
+  scores: {
+    [attributeId: string]: number;
   };
   setAttributeScore: (
     id: string,
@@ -32,9 +29,29 @@ interface IOptionProps extends Node {
   data: IOptionData;
 }
 
-const Option = memo(({ id, data }: IOptionProps) => {
-  const { weightings } = data;
-  console.log("weightings", weightings);
+const Option = ({ id, data }: IOptionProps) => {
+  const { scores } = data;
+
+  const nodes = useStoreState((state) => state.nodes);
+
+  console.log("nodes", nodes);
+
+  const weightedAttributes = nodes.filter(
+    (node) => node.type === "weightingInput"
+  );
+
+  console.log("scores", scores);
+
+  const calculateTotalScore = () => {
+    const total = weightedAttributes.reduce((total, attribute) => {
+      const score = scores[attribute.id] || 0;
+      const subscore = attribute.data.weighting * score;
+      return total + subscore;
+    }, 0);
+
+    return total;
+  };
+
   return (
     <OptionWrapper>
       <Handle
@@ -44,6 +61,7 @@ const Option = memo(({ id, data }: IOptionProps) => {
         style={{ top: -5, background: "#555" }}
       />
       <input
+        className="nodrag"
         type="text"
         placeholder="Enter option name"
         value={data.label}
@@ -51,26 +69,32 @@ const Option = memo(({ id, data }: IOptionProps) => {
       />
 
       <div>
-        {Object.keys(weightings).map((id) => {
-          const attribute = weightings[id];
-
+        {weightedAttributes.map(({ id: attributeId, data: attributeData }) => {
+          const score = scores[attributeId] || 0;
           return (
-            <div key={id}>
+            <div key={attributeId}>
               <div>
-                {attribute.attributeName} ({attribute.weighting}/100)
+                {attributeData.label} ({score}/100)
               </div>
               <input
                 className="nodrag"
-                name={id}
+                name={attributeId}
                 type="range"
                 min={0}
                 max={100}
-                value={attribute.weighting}
-                onChange={(e) => data.setAttributeScore(id, e)}
+                value={score}
+                onChange={(e) => {
+                  data.setAttributeScore(id, e);
+                }}
               />
             </div>
           );
         })}
+      </div>
+
+      <div>
+        <h4>Score</h4>
+        {calculateTotalScore()}
       </div>
 
       <Handle
@@ -81,6 +105,6 @@ const Option = memo(({ id, data }: IOptionProps) => {
       />
     </OptionWrapper>
   );
-});
+};
 
 export default Option;
