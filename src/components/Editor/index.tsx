@@ -13,7 +13,7 @@ import ReactFlow, {
 import styled from "styled-components";
 import WeightingInput from "../WeightingInput";
 import Option from "../Option";
-import ts from "typescript";
+import Result from "../Result";
 
 const EditorWrapper = styled.div`
   height: 80vh;
@@ -23,6 +23,7 @@ const EditorWrapper = styled.div`
 const nodeTypes = {
   weightingInput: WeightingInput,
   option: Option,
+  result: Result,
 };
 
 const Editor = () => {
@@ -134,7 +135,19 @@ const Editor = () => {
         targetPosition: Position.Top,
       },
       {
-        id: "e2a-3",
+        id: "5",
+        type: "result",
+        data: {
+          label: "Result",
+          scores: {
+            "2": 50,
+          },
+        },
+        position: { x: 300, y: 700 },
+        targetPosition: Position.Top,
+      },
+      {
+        id: "6",
         source: "2",
         target: "3",
         sourceHandle: "a",
@@ -143,9 +156,27 @@ const Editor = () => {
         style: { stroke: "teal" },
       },
       {
-        id: "e2b-4",
+        id: "7",
         source: "2",
         target: "4",
+        targetHandle: "a",
+        animated: true,
+        style: { stroke: "teal" },
+      },
+      {
+        id: "8",
+        source: "3",
+        target: "5",
+        sourceHandle: "b",
+        targetHandle: "a",
+        animated: true,
+        style: { stroke: "teal" },
+      },
+      {
+        id: "9",
+        source: "4",
+        target: "5",
+        sourceHandle: "b",
         targetHandle: "a",
         animated: true,
         style: { stroke: "teal" },
@@ -204,13 +235,28 @@ const Editor = () => {
     setElements((elements) => [...elements, newOption]);
     // add edges
     const newEdges: Edge[] = elements
-      .filter((element) => element.type === "weightingInput") // TODO: result node connection
+      .filter(
+        (element) =>
+          element.type === "weightingInput" || element.type === "result"
+      )
       .map((element) => {
+        if (element.type === "weightingInput") {
+          return {
+            id: shortid.generate(),
+            source: element.id,
+            target: newOption.id,
+            sourceHandle: "a",
+            targetHandle: "a",
+            animated: true,
+            style: { stroke: "teal" },
+          };
+        }
+
         return {
           id: shortid.generate(),
-          source: element.id,
-          target: newOption.id,
-          sourceHandle: "a",
+          source: newOption.id,
+          target: element.id,
+          sourceHandle: "b",
           targetHandle: "a",
           animated: true,
           style: { stroke: "teal" },
