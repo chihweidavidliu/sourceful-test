@@ -5,6 +5,7 @@ const RangeInputWrapper = styled.div`
   padding: 10px;
   display: grid;
   grid-gap: 6px;
+  cursor: default;
 `;
 
 interface IRangeInputProps extends HTMLProps<HTMLInputElement> {
