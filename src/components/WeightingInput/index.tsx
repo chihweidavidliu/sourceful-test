@@ -1,9 +1,9 @@
 import React, { memo } from "react";
 import styled from "styled-components";
-import { Handle, Position } from "react-flow-renderer";
+import { Handle, Position, Node } from "react-flow-renderer";
 
 const WeightingInputWrapper = styled.div`
-  min-width: 100px;
+  min-width: 120px;
   padding: 10px;
   display: grid;
   grid-gap: 10px;
@@ -12,27 +12,40 @@ const WeightingInputWrapper = styled.div`
 interface IWeightingInputData {
   label: string;
   weighting: number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleWeightingChange: (
+    id: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+  handleLabelChange: (
+    id: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => void;
 }
 
-interface IWeightingInputProps {
+interface IWeightingInputProps extends Node {
   data: IWeightingInputData;
 }
 
-const WeightingInput = memo(({ data }: IWeightingInputProps) => {
+const WeightingInput = memo(({ id, data }: IWeightingInputProps) => {
   return (
     <WeightingInputWrapper>
-      <input type="text" placeholder="Enter attribute name" />
+      <input
+        type="text"
+        placeholder="Enter attribute name"
+        value={data.label}
+        onChange={(e) => data.handleLabelChange(id, e)}
+      />
       <div>
         <div>
-          Attribute Weighting <strong>{data.weighting}</strong>
+          Weighting <strong>{data.weighting}</strong>
         </div>
         <input
           className="nodrag"
           type="range"
           min={0}
-          max={10}
-          onChange={data.onChange}
+          step="0.1"
+          max={1}
+          onChange={(e) => data.handleWeightingChange(id, e)}
           defaultValue={0}
         />
       </div>
