@@ -61,9 +61,6 @@ const nodeTypes = {
 };
 
 const Editor = () => {
-  const [elements, setElements] = useState<Elements>([]);
-  const { fitView } = useZoomPanHelper();
-
   const handleChange = (
     id: string,
     event: React.ChangeEvent<HTMLInputElement>
@@ -117,14 +114,18 @@ const Editor = () => {
     );
   };
 
+  const [elements, setElements] = useState<Elements>(
+    getDefaultElements({
+      handleChange,
+      setAttributeScore,
+    })
+  );
+  const { fitView } = useZoomPanHelper();
+
+  // fit graph into view on load
   useEffect(() => {
-    setElements(
-      getDefaultElements({
-        handleChange,
-        setAttributeScore,
-      })
-    );
-  }, []);
+    fitView();
+  }, [fitView]);
 
   const onElementsRemove = (elementsToRemove: Elements) => {
     const resultNode = elementsToRemove.find(
