@@ -12,6 +12,7 @@ const ResultWrapper = styled(Card)`
 const Label = styled.div`
   font-size: 26px;
   font-weight: bold;
+  color: ${({ theme }) => theme.lightAccentColour};
 `;
 
 const Winner = styled.div`
