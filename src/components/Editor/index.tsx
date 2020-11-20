@@ -128,26 +128,48 @@ const Editor = () => {
   }, [fitView]);
 
   const onElementsRemove = (elementsToRemove: Elements) => {
-    const resultNode = elementsToRemove.find(
-      (element) => element?.type === CustomNode.RESULT
-    );
+    const nodeToRemove = elementsToRemove.find((element) => !isEdge(element));
 
-    if (resultNode) {
+    const indexInElements = nodeToRemove
+      ? elements.findIndex((element) => element.id === nodeToRemove.id)
+      : -1;
+
+    if (nodeToRemove?.type === CustomNode.RESULT) {
       return alert("Cannot delete result node");
     }
 
-    const weightedAttribute = elementsToRemove.find(
-      (element) => element?.type === CustomNode.WEIGHTED_ATTRIBUTE
-    );
-
-    if (weightedAttribute) {
+    if (nodeToRemove?.type === CustomNode.WEIGHTED_ATTRIBUTE) {
       // remove attribute from all option nodes and move results down
       setElements((elements) =>
-        elements.map((element) => {
+        elements.map((element, index) => {
+          if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
+            const attributeNode = element as Node;
+            // shift all attribute nodes to the left of the deleted node to the right
+            if (index < indexInElements) {
+              return {
+                ...attributeNode,
+                position: {
+                  ...attributeNode.position,
+                  x: attributeNode.position.x + 150,
+                },
+              };
+            } else if (index > indexInElements) {
+              // shift all attribute nodes to the right of the deleted node to the left
+              return {
+                ...attributeNode,
+                position: {
+                  ...attributeNode.position,
+                  x: attributeNode.position.x - 150,
+                },
+              };
+            }
+            return attributeNode;
+          }
+
           if (element.type === CustomNode.OPTION) {
             const updatedWeightings = omit(
               element.data.weightings,
-              weightedAttribute.id
+              nodeToRemove.id
             );
             return {
               ...element,
@@ -167,6 +189,38 @@ const Editor = () => {
                 y: resultElement.position.y - 70,
               },
             };
+          }
+
+          return element;
+        })
+      );
+    }
+
+    if (nodeToRemove?.type === CustomNode.OPTION) {
+      setElements((elements) =>
+        elements.map((element, index) => {
+          if (element.type === CustomNode.OPTION) {
+            const optionNode = element as Node;
+            // shift all option nodes to the left of the deleted node to the right
+            if (index < indexInElements) {
+              return {
+                ...optionNode,
+                position: {
+                  ...optionNode.position,
+                  x: optionNode.position.x + 150,
+                },
+              };
+            } else if (index > indexInElements) {
+              // shift all option nodes to the right of the deleted node to the left
+              return {
+                ...optionNode,
+                position: {
+                  ...optionNode.position,
+                  x: optionNode.position.x - 150,
+                },
+              };
+            }
+            return optionNode;
           }
 
           return element;
@@ -373,6 +427,7 @@ const Editor = () => {
           snapToGrid={true}
           snapGrid={[15, 15]}
           defaultZoom={0.8}
+          nodesDraggable={false}
         >
           <CustomMiniMap />
           <Background color="#aaa" gap={16} />
