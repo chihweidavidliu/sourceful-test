@@ -23,12 +23,30 @@ import { IWeightedAttributeProps } from "../WeightedAttribute";
 import { Button, ButtonGroup } from "../Button";
 
 const EditorWrapper = styled.div`
-  height: 95vh;
+  height: 82vh;
+  width: 95vw;
+  margin: 0 auto;
   border: 1px solid lightgrey;
+  background: white;
+  border-radius: 5px;
+`;
+
+const H1 = styled.h1`
+  margin: 0;
+  padding: 0;
+  font-size: 32px;
+  margin-bottom: 10px;
 `;
 
 const Toolbar = styled.div`
+  padding: 15px;
   height: 15vh;
+  max-height: 15vh;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const nodeTypes = {
@@ -44,19 +62,22 @@ const Editor = () => {
     id: string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setElements((els) =>
-      els.map((e) => {
-        if (isEdge(e) || e.id !== id) {
-          return e;
+    setElements((elements) =>
+      elements.map((element) => {
+        if (isEdge(element) || element.id !== id) {
+          return element;
         }
         const { name, value } = event.target;
-        return {
-          ...e,
+
+        const updatedNode: Node = {
+          ...element,
           data: {
-            ...e.data,
+            ...element.data,
             [name]: value,
           },
         };
+
+        return updatedNode;
       })
     );
   };
@@ -65,8 +86,8 @@ const Editor = () => {
     id: string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setElements((els) =>
-      els.map((element) => {
+    setElements((elements) =>
+      elements.map((element) => {
         if (isEdge(element) || element.id !== id) {
           return element;
         }
@@ -245,7 +266,7 @@ const Editor = () => {
   return (
     <>
       <Toolbar>
-        <h1>Decision Maker</h1>
+        <H1>Decision Maker</H1>
         <ButtonGroup>
           <Button onClick={addWeightedAttribute}>Add Attribute</Button>
           <Button onClick={addOption}>Add Option</Button>

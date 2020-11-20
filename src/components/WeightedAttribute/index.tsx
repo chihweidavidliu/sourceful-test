@@ -50,6 +50,7 @@ const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
         position={Position.Bottom}
         id="a"
         style={{ bottom: -5, background: "#555" }}
+        isConnectable={false}
       />
     </WeightedAttributeWrapper>
   );

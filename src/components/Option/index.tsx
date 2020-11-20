@@ -64,6 +64,7 @@ const Option = ({ id, data, selected }: IOptionProps) => {
         position={Position.Top}
         id="a"
         style={{ top: -5, background: "#555" }}
+        isConnectable={false}
       />
       <TextInput
         className="nodrag"
@@ -113,6 +114,7 @@ const Option = ({ id, data, selected }: IOptionProps) => {
         position={Position.Bottom}
         id="b"
         style={{ bottom: -5, background: "#555" }}
+        isConnectable={false}
       />
     </OptionWrapper>
   );

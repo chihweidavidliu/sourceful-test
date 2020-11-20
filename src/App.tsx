@@ -8,6 +8,10 @@ const AppWrapper = styled.div`
   height: 100vh;
   overflow: hidden;
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  background: teal;
+
   *,
   *:before,
   *:after {

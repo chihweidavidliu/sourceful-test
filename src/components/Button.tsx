@@ -1,18 +1,35 @@
 import styled from "styled-components";
 
 export const Button = styled.button`
-  font-size: 20px;
-  padding: 6px;
+  font-size: 14px;
+  padding: 0px 9px;
   background: white;
   border: 0;
-  border: 1px solid lightgrey;
+  border: 2px solid white;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 50px;
+  background: transparent;
+  color: white;
+  opacity: 0.8;
+  font-weight: bold;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    opacity: 1;
+    background: white;
+    color: teal;
+  }
+  &:focus {
+    box-shadow: 0px 2px 6px rgb(6, 22, 22, 0.5);
+  }
 `;
 
 export const ButtonGroup = styled.div`
   display: flex;
-  width: 100%;
-  justify-content: center;
-  margin: 10px;
+  flex-shrink: 0;
+  min-height: 40px;
+  width: 220px;
+  justify-content: space-between;
+  margin: 0 auto;
 `;

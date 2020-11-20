@@ -28,7 +28,7 @@ export const getDefaultElements = ({
       id: "3",
       type: CustomNode.OPTION,
       data: {
-        label: "Option 1",
+        label: "Option 2",
         handleChange,
         setAttributeScore,
         scores: {
@@ -42,7 +42,7 @@ export const getDefaultElements = ({
       id: "4",
       type: CustomNode.OPTION,
       data: {
-        label: "Option 2",
+        label: "Option 1",
         handleChange,
         setAttributeScore,
         scores: {

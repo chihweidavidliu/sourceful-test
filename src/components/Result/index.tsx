@@ -113,6 +113,7 @@ const Result = ({ selected }: IResultProps) => {
         position={Position.Top}
         id="a"
         style={{ top: -5, background: "#555" }}
+        isConnectable={false}
       />
       {renderResult()}
     </ResultWrapper>
