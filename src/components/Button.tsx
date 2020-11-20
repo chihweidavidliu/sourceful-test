@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Button = styled.button`
+  font-family: "Ubuntu", sans-serif;
   font-size: 14px;
   padding: 0px 9px;
   background: white;

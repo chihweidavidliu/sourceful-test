@@ -11,6 +11,7 @@ const AppWrapper = styled.div`
   padding: 0;
   margin: 0;
   background: teal;
+  font-family: "Ubuntu", sans-serif;
 
   *,
   *:before,

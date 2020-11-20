@@ -35,7 +35,7 @@ const EditorWrapper = styled.div`
 const H1 = styled.h1`
   margin: 0;
   padding: 0;
-  font-size: 32px;
+  font-size: 36px;
   margin-bottom: 10px;
 `;
 
