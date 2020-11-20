@@ -11,6 +11,7 @@ import ReactFlow, {
   Background,
   isEdge,
   FlowElement,
+  useZoomPanHelper,
 } from "react-flow-renderer";
 import styled from "styled-components";
 import WeightedAttribute from "../WeightedAttribute";
@@ -61,6 +62,7 @@ const nodeTypes = {
 
 const Editor = () => {
   const [elements, setElements] = useState<Elements>([]);
+  const { fitView } = useZoomPanHelper();
 
   const handleChange = (
     id: string,
@@ -191,6 +193,24 @@ const Editor = () => {
   const addOption = () => {
     const id = shortid.generate();
 
+    setElements((elements) =>
+      elements.map((element) => {
+        // shift existing options left
+        if (element.type === CustomNode.OPTION) {
+          const optionNode = element as Node;
+          return {
+            ...element,
+            position: {
+              ...optionNode.position,
+              x: optionNode.position.x - 150,
+            },
+          };
+        }
+
+        return element;
+      })
+    );
+
     // get last created option to determine position of new option
     const lastOption = getLastElementByType(CustomNode.OPTION);
 
@@ -204,7 +224,7 @@ const Editor = () => {
         scores: {},
       },
       position: {
-        x: lastOption ? lastOption.position.x + 300 : 100,
+        x: lastOption ? lastOption.position.x + 150 : 100,
         y: lastOption ? lastOption.position.y : 300,
       },
     };
@@ -247,10 +267,43 @@ const Editor = () => {
 
       return [...elements, ...newEdges];
     });
+
+    fitView();
   };
 
   const addWeightedAttribute = () => {
     const id = shortid.generate();
+
+    setElements((elements) =>
+      elements.map((element) => {
+        // shift existing attributes left
+        if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
+          const attributeNode = element as Node;
+          return {
+            ...element,
+            position: {
+              ...attributeNode.position,
+              x: attributeNode.position.x - 150,
+            },
+          };
+        }
+
+        // shift result down
+        if (element.type === CustomNode.RESULT) {
+          const resultNode = element as Node;
+          const updatedNode: Node = {
+            ...element,
+            position: {
+              x: resultNode.position.x,
+              y: resultNode.position.y + 70,
+            },
+          };
+
+          return updatedNode;
+        }
+        return element;
+      })
+    );
 
     // get last created weighted attribute to determine position of new attribute
     const lastWeightedAttribute = getLastElementByType(
@@ -267,7 +320,7 @@ const Editor = () => {
       },
       position: {
         x: lastWeightedAttribute
-          ? lastWeightedAttribute?.position.x + 300
+          ? lastWeightedAttribute?.position.x + 150
           : 100,
         y: lastWeightedAttribute ? lastWeightedAttribute?.position.y : 50,
       },
@@ -296,21 +349,7 @@ const Editor = () => {
       return [...elements, ...newEdges];
     });
 
-    // move results down
-    setElements((elements) =>
-      elements.map((element) => {
-        if (isEdge(element) || element.type !== CustomNode.RESULT) {
-          return element;
-        }
-
-        const updatedNode: Node = {
-          ...element,
-          position: { x: element.position.x, y: element.position.y + 70 },
-        };
-
-        return updatedNode;
-      })
-    );
+    fitView();
   };
 
   return (
@@ -321,7 +360,6 @@ const Editor = () => {
           <Button onClick={addWeightedAttribute}>Add Attribute</Button>
           <Button onClick={addOption}>Add Option</Button>
         </ButtonGroup>
-
         <Tips />
       </Toolbar>
 

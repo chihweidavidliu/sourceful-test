@@ -23,7 +23,7 @@ export const getDefaultElements = ({
         handleChange,
         weighting: 1,
       },
-      position: { x: 100, y: 50 },
+      position: { x: 250, y: 50 },
     },
     {
       id: "3",

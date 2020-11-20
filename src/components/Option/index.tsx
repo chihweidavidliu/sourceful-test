@@ -40,7 +40,6 @@ export interface IOptionProps extends Node {
 
 const Option = ({ id, data, selected }: IOptionProps) => {
   const { scores, handleChange, setAttributeScore } = data;
-
   const nodes = useStoreState((state) => state.nodes);
 
   const weightedAttributes = nodes.filter(
