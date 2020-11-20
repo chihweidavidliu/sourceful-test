@@ -251,6 +251,7 @@ const Editor = () => {
     const options = elements.filter(
       (element) => element.type === CustomNode.OPTION
     );
+
     const newEdges = options.map((option) => {
       return {
         id: shortid.generate(),
@@ -264,6 +265,22 @@ const Editor = () => {
     });
 
     setElements((elements) => [...elements, ...newEdges]);
+
+    // move results down
+    setElements((elements) =>
+      elements.map((element) => {
+        if (isEdge(element) || element.type !== CustomNode.RESULT) {
+          return element;
+        }
+
+        const updatedNode: Node = {
+          ...element,
+          position: { x: element.position.x, y: element.position.y + 70 },
+        };
+
+        return updatedNode;
+      })
+    );
   };
 
   return (

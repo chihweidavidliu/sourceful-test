@@ -61,7 +61,7 @@ export const getDefaultElements = ({
           "2": 50,
         },
       },
-      position: { x: 300, y: 700 },
+      position: { x: 300, y: 600 },
       targetPosition: Position.Top,
     },
     {
