@@ -57,7 +57,7 @@ const Option = (props: IOptionProps) => {
     return total.toFixed(1);
   };
 
-  const handleUpdate = (field: "label" | "score", value: string | number) => {
+  const handleUpdate = (field: string, value: string | number) => {
     const updated: Node = {
       ...props,
       position: { x: props.xPos!, y: props.yPos! }, // reconstitue missing position object
