@@ -8,9 +8,9 @@ import ReactFlow, {
   Node,
   addEdge,
   Connection,
-  Position,
   Background,
   isEdge,
+  FlowElement,
 } from "react-flow-renderer";
 import styled from "styled-components";
 import WeightedAttribute from "../WeightedAttribute";
@@ -22,6 +22,7 @@ import { IOptionProps } from "../Option";
 import { IWeightedAttributeProps } from "../WeightedAttribute";
 import { Button, ButtonGroup } from "../Button";
 import CustomMiniMap from "../MiniMap";
+import { findLastIndex } from "../../util/findLastIndex";
 
 const EditorWrapper = styled.div`
   height: 82vh;
@@ -133,8 +134,9 @@ const Editor = () => {
     const weightedAttribute = elementsToRemove.find(
       (element) => element?.type === CustomNode.WEIGHTED_ATTRIBUTE
     );
+
     if (weightedAttribute) {
-      // remove attribute from all option nodes
+      // remove attribute from all option nodes and move results down
       setElements((elements) =>
         elements.map((element) => {
           if (element.type === CustomNode.OPTION) {
@@ -151,6 +153,17 @@ const Editor = () => {
             };
           }
 
+          if (element.type === CustomNode.RESULT) {
+            const resultElement = element as Node;
+            return {
+              ...element,
+              position: {
+                x: resultElement.position.x,
+                y: resultElement.position.y - 70,
+              },
+            };
+          }
+
           return element;
         })
       );
@@ -162,13 +175,22 @@ const Editor = () => {
   const onConnect = (params: Edge | Connection) =>
     setElements((els) => addEdge(params, els));
 
+  const getLastElementByType = (type: CustomNode) => {
+    const lastIndex = findLastIndex<FlowElement>(
+      elements,
+      (element: FlowElement) => {
+        return element.type === type;
+      }
+    );
+    const lastElement = elements[lastIndex] as Node;
+    return lastElement;
+  };
+
   const addOption = () => {
     const id = shortid.generate();
 
     // get last created option to determine position of new option
-    const lastOption = elements.find(
-      (element) => element.type === CustomNode.OPTION
-    ) as Node;
+    const lastOption = getLastElementByType(CustomNode.OPTION);
 
     const newOption: IOptionProps = {
       id: id,
@@ -183,51 +205,55 @@ const Editor = () => {
         x: lastOption ? lastOption.position.x + 300 : 100,
         y: lastOption ? lastOption.position.y : 300,
       },
-      targetPosition: Position.Top,
     };
+    console.log("NEW OPTION ID", newOption.id);
 
-    setElements((elements) => [newOption, ...elements]);
-    // add edges
-    const newEdges: Edge[] = elements
-      .filter(
-        (element) =>
-          element.type === CustomNode.WEIGHTED_ATTRIBUTE ||
-          element.type === CustomNode.RESULT
-      )
-      .map((element) => {
-        if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
+    setElements((elements) => [...elements, newOption]);
+
+    setElements((elements) => {
+      // add edges
+      const newEdges: Edge[] = elements
+        .filter(
+          (element) => element.type === CustomNode.WEIGHTED_ATTRIBUTE
+          // element.type === CustomNode.RESULT
+        )
+        .map((element) => {
+          const edgeId = shortid.generate();
+          if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
+            console.log("edgeId", edgeId);
+            return {
+              id: edgeId,
+              source: element.id,
+              target: newOption.id,
+              sourceHandle: "a",
+              targetHandle: "a",
+              animated: true,
+              style: { stroke: "teal" },
+            };
+          }
+
           return {
-            id: shortid.generate(),
-            source: element.id,
-            target: newOption.id,
-            sourceHandle: "a",
+            id: edgeId,
+            source: newOption.id,
+            target: element.id,
+            sourceHandle: "b",
             targetHandle: "a",
             animated: true,
             style: { stroke: "teal" },
           };
-        }
+        });
 
-        return {
-          id: shortid.generate(),
-          source: newOption.id,
-          target: element.id,
-          sourceHandle: "b",
-          targetHandle: "a",
-          animated: true,
-          style: { stroke: "teal" },
-        };
-      });
-
-    setElements((elements) => [...elements, ...newEdges]);
+      return [...elements, ...newEdges];
+    });
   };
 
   const addWeightedAttribute = () => {
     const id = shortid.generate();
 
     // get last created weighted attribute to determine position of new attribute
-    const lastWeightedAttribute = elements.find(
-      (element) => element.type === CustomNode.WEIGHTED_ATTRIBUTE
-    ) as Node;
+    const lastWeightedAttribute = getLastElementByType(
+      CustomNode.WEIGHTED_ATTRIBUTE
+    );
 
     const newAttribute: IWeightedAttributeProps = {
       id,
@@ -245,26 +271,28 @@ const Editor = () => {
       },
     };
 
-    setElements((elements) => [newAttribute, ...elements]);
+    setElements((elements) => [...elements, newAttribute]);
 
-    // add edges
-    const options = elements.filter(
-      (element) => element.type === CustomNode.OPTION
-    );
+    setElements((elements) => {
+      // add edges
+      const options = elements.filter(
+        (element) => element.type === CustomNode.OPTION
+      );
 
-    const newEdges = options.map((option) => {
-      return {
-        id: shortid.generate(),
-        source: id,
-        target: option.id,
-        sourceHandle: "a",
-        targetHandle: "a",
-        animated: true,
-        style: { stroke: "teal" },
-      };
+      const newEdges = options.map((option) => {
+        return {
+          id: shortid.generate(),
+          source: id,
+          target: option.id,
+          sourceHandle: "a",
+          targetHandle: "a",
+          animated: true,
+          style: { stroke: "teal" },
+        };
+      });
+
+      return [...elements, ...newEdges];
     });
-
-    setElements((elements) => [...elements, ...newEdges]);
 
     // move results down
     setElements((elements) =>

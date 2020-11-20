@@ -28,20 +28,6 @@ export const getDefaultElements = ({
       id: "3",
       type: CustomNode.OPTION,
       data: {
-        label: "Option 2",
-        handleChange,
-        setAttributeScore,
-        scores: {
-          "2": 50,
-        },
-      },
-      position: { x: 400, y: 300 },
-      targetPosition: Position.Top,
-    },
-    {
-      id: "4",
-      type: CustomNode.OPTION,
-      data: {
         label: "Option 1",
         handleChange,
         setAttributeScore,
@@ -50,6 +36,20 @@ export const getDefaultElements = ({
         },
       },
       position: { x: 100, y: 300 },
+      targetPosition: Position.Top,
+    },
+    {
+      id: "4",
+      type: CustomNode.OPTION,
+      data: {
+        label: "Option 2",
+        handleChange,
+        setAttributeScore,
+        scores: {
+          "2": 50,
+        },
+      },
+      position: { x: 400, y: 300 },
       targetPosition: Position.Top,
     },
     {
