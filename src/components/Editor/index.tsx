@@ -21,6 +21,7 @@ import { getDefaultElements } from "./getDefaultElements";
 import { IOptionProps } from "../Option";
 import { IWeightedAttributeProps } from "../WeightedAttribute";
 import { Button, ButtonGroup } from "../Button";
+import CustomMiniMap from "../MiniMap";
 
 const EditorWrapper = styled.div`
   height: 82vh;
@@ -284,6 +285,7 @@ const Editor = () => {
           snapGrid={[15, 15]}
           defaultZoom={0.8}
         >
+          <CustomMiniMap />
           <Background color="#aaa" gap={16} />
         </ReactFlow>
       </EditorWrapper>
