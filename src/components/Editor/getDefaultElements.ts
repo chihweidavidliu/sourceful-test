@@ -1,5 +1,6 @@
 import { Position } from "react-flow-renderer";
 import { CustomNode } from "../../types/CustomNode";
+import { defaultEdgeStyle } from "../../util/defaultEdgeStyle";
 
 interface IGetDefaultElementsArgs {
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -71,7 +72,7 @@ export const getDefaultElements = ({
       sourceHandle: "a",
       targetHandle: "a",
       animated: true,
-      style: { stroke: "teal" },
+      style: defaultEdgeStyle,
     },
     {
       id: "7",
@@ -79,7 +80,7 @@ export const getDefaultElements = ({
       target: "4",
       targetHandle: "a",
       animated: true,
-      style: { stroke: "teal" },
+      style: defaultEdgeStyle,
     },
     {
       id: "8",
@@ -88,7 +89,7 @@ export const getDefaultElements = ({
       sourceHandle: "b",
       targetHandle: "a",
       animated: true,
-      style: { stroke: "teal" },
+      style: defaultEdgeStyle,
     },
     {
       id: "9",
@@ -97,7 +98,7 @@ export const getDefaultElements = ({
       sourceHandle: "b",
       targetHandle: "a",
       animated: true,
-      style: { stroke: "teal" },
+      style: defaultEdgeStyle,
     },
   ];
 };

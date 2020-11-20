@@ -19,7 +19,7 @@ export const Button = styled.button`
     outline: none;
     opacity: 1;
     background: white;
-    color: teal;
+    color: #ef4158;
   }
   &:focus {
     box-shadow: 0px 2px 6px rgb(6, 22, 22, 0.5);

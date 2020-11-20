@@ -16,7 +16,7 @@ const Label = styled.div`
 
 const Winner = styled.div`
   font-size: 30px;
-  color: teal;
+  color: #2d165b;
   font-weight: bold;
 `;
 

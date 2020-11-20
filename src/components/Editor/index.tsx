@@ -23,6 +23,7 @@ import { IWeightedAttributeProps } from "../WeightedAttribute";
 import { Button, ButtonGroup } from "../Button";
 import CustomMiniMap from "../MiniMap";
 import { findLastIndex } from "../../util/findLastIndex";
+import { defaultEdgeStyle } from "../../util/defaultEdgeStyle";
 
 const EditorWrapper = styled.div`
   height: 82vh;
@@ -228,7 +229,7 @@ const Editor = () => {
               sourceHandle: "a",
               targetHandle: "a",
               animated: true,
-              style: { stroke: "teal" },
+              style: defaultEdgeStyle,
             };
           }
 
@@ -239,7 +240,7 @@ const Editor = () => {
             sourceHandle: "b",
             targetHandle: "a",
             animated: true,
-            style: { stroke: "teal" },
+            style: defaultEdgeStyle,
           };
         });
 
@@ -287,7 +288,7 @@ const Editor = () => {
           sourceHandle: "a",
           targetHandle: "a",
           animated: true,
-          style: { stroke: "teal" },
+          style: defaultEdgeStyle,
         };
       });
 

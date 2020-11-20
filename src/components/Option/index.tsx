@@ -17,7 +17,7 @@ const H4 = styled.h4`
 
 const Score = styled.div`
   font-weight: bold;
-  color: teal;
+  color: #2d165b;
   font-size: 24px;
 `;
 
