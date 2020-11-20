@@ -11,6 +11,7 @@ interface IWeightedAttributeAttrs {
   label: string;
   weighting: number;
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
+  setAttributeWeighting: (id: string, weighting: number) => void;
 }
 
 export interface IWeightedAttributeProps extends Node {
@@ -19,7 +20,7 @@ export interface IWeightedAttributeProps extends Node {
 }
 
 const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
-  const { handleChange } = data;
+  const { handleChange, setAttributeWeighting } = data;
   return (
     <WeightedAttributeWrapper isSelected={selected}>
       <TextInput
@@ -37,12 +38,11 @@ const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
       <RangeInput
         label="Weighting"
         min={0}
-        step="0.1"
+        step={0.1}
         max={1}
-        name="weighting"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChange(id, e)
-        }
+        onChange={(value: number) => {
+          setAttributeWeighting(id, value);
+        }}
         value={data.weighting}
       />
 

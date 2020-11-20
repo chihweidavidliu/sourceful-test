@@ -85,9 +85,30 @@ const Editor = () => {
     );
   };
 
+  const setAttributeWeighting = (id: string, weighting: number) => {
+    setElements((elements) =>
+      elements.map((element) => {
+        if (isEdge(element) || element.id !== id) {
+          return element;
+        }
+
+        const updatedNode: Node = {
+          ...element,
+          data: {
+            ...element.data,
+            weighting,
+          },
+        };
+
+        return updatedNode;
+      })
+    );
+  };
+
   const setAttributeScore = (
     id: string,
-    event: React.ChangeEvent<HTMLInputElement>
+    attributeId: string,
+    value: number
   ) => {
     setElements((elements) =>
       elements.map((element) => {
@@ -95,12 +116,9 @@ const Editor = () => {
           return element;
         }
 
-        const attributeId = event.target.name;
-        const attributeScore = event.target.value;
-
         const updatedScores = {
           ...element.data.scores,
-          [attributeId]: attributeScore,
+          [attributeId]: value,
         };
 
         return {
@@ -118,6 +136,7 @@ const Editor = () => {
     getDefaultElements({
       handleChange,
       setAttributeScore,
+      setAttributeWeighting,
     })
   );
 
@@ -249,6 +268,7 @@ const Editor = () => {
       type: CustomNode.WEIGHTED_ATTRIBUTE,
       data: {
         label: "New Attribute",
+        setAttributeWeighting,
         handleChange,
         weighting: 1,
       },

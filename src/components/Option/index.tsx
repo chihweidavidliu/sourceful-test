@@ -27,10 +27,7 @@ export interface IOptionAttrs {
     [attributeId: string]: number;
   };
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
-  setAttributeScore: (
-    id: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
+  setAttributeScore: (id: string, attributeId: string, value: number) => void;
 }
 
 export interface IOptionProps extends Node {
@@ -86,12 +83,11 @@ const Option = ({ id, data, selected }: IOptionProps) => {
                   <RangeInput
                     label={attributeData.label}
                     key={attributeId}
-                    name={attributeId}
                     min={0}
                     max={100}
                     value={score}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setAttributeScore(id, e);
+                    onChange={(value: number) => {
+                      setAttributeScore(id, attributeId, value);
                     }}
                   />
                 );

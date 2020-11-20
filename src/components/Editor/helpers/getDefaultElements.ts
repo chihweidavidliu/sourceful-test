@@ -4,15 +4,14 @@ import { defaultEdgeStyle } from "../../../util/defaultEdgeStyle";
 
 interface IGetDefaultElementsArgs {
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
-  setAttributeScore: (
-    id: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
+  setAttributeScore: (id: string, attributeId: string, value: number) => void;
+  setAttributeWeighting: (id: string, weighting: number) => void;
 }
 
 export const getDefaultElements = ({
   handleChange,
   setAttributeScore,
+  setAttributeWeighting,
 }: IGetDefaultElementsArgs) => {
   return [
     {
@@ -21,6 +20,7 @@ export const getDefaultElements = ({
       data: {
         label: "New Attribute",
         handleChange,
+        setAttributeWeighting,
         weighting: 1,
       },
       position: { x: 250, y: 50 },
