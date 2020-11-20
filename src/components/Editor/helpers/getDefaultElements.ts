@@ -8,11 +8,13 @@ interface IGetDefaultElementsArgs {
     id: string,
     e: React.ChangeEvent<HTMLInputElement>
   ) => void;
+  updateNode: (updated: Node) => void;
 }
 
 export const getDefaultElements = ({
   handleChange,
   setAttributeScore,
+  updateNode,
 }: IGetDefaultElementsArgs) => {
   return [
     {
@@ -21,6 +23,7 @@ export const getDefaultElements = ({
       data: {
         label: "New Attribute",
         handleChange,
+        updateNode,
         weighting: 1,
       },
       position: { x: 250, y: 50 },

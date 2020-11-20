@@ -250,6 +250,7 @@ const Editor = () => {
       data: {
         label: "New Attribute",
         handleChange,
+        updateNode,
         weighting: 1,
       },
       position: {

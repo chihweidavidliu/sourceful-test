@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Handle, Position, Node } from "react-flow-renderer";
 import { Card } from "../Card";
@@ -11,27 +11,51 @@ interface IWeightedAttributeAttrs {
   label: string;
   weighting: number;
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
+  updateNode: (updated: Node) => void;
 }
 
 export interface IWeightedAttributeProps extends Node {
   data: IWeightedAttributeAttrs;
   selected?: boolean;
+  xPos?: number;
+  yPos?: number;
 }
 
-const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
-  const { handleChange } = data;
+const WeightedAttribute = (props: IWeightedAttributeProps) => {
+  const { data, selected } = props;
+  const [label, setLabel] = useState(data.label);
+  const [weighting, setWeighting] = useState(data.weighting);
+  const { updateNode } = data;
+
+  const handleUpdate = (
+    field: "label" | "weighting",
+    value: string | number
+  ) => {
+    const updated: Node = {
+      ...props,
+      position: { x: props.xPos!, y: props.yPos! }, // reconstitue missing position object
+      data: {
+        ...data,
+        [field]: value,
+      },
+    };
+
+    updateNode(updated);
+  };
+
   return (
     <WeightedAttributeWrapper isSelected={selected}>
       <TextInput
         className="nodrag"
         type="text"
         placeholder="Enter attribute name"
-        value={data.label}
+        value={label}
         name="label"
         maxLength={20}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChange(id, e)
+          setLabel(e.target.value)
         }
+        onBlur={() => handleUpdate("label", label)}
       />
 
       <RangeInput
@@ -40,10 +64,11 @@ const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
         step="0.1"
         max={1}
         name="weighting"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChange(id, e)
-        }
-        value={data.weighting}
+        value={weighting}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setWeighting(Number(e.target.value));
+        }}
+        onMouseUp={() => handleUpdate("weighting", weighting)}
       />
 
       <Handle
