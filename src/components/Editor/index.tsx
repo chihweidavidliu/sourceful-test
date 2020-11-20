@@ -206,7 +206,6 @@ const Editor = () => {
         y: lastOption ? lastOption.position.y : 300,
       },
     };
-    console.log("NEW OPTION ID", newOption.id);
 
     setElements((elements) => [...elements, newOption]);
 
@@ -214,13 +213,14 @@ const Editor = () => {
       // add edges
       const newEdges: Edge[] = elements
         .filter(
-          (element) => element.type === CustomNode.WEIGHTED_ATTRIBUTE
-          // element.type === CustomNode.RESULT
+          (element) =>
+            element.type === CustomNode.WEIGHTED_ATTRIBUTE ||
+            element.type === CustomNode.RESULT
         )
         .map((element) => {
           const edgeId = shortid.generate();
+
           if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
-            console.log("edgeId", edgeId);
             return {
               id: edgeId,
               source: element.id,
