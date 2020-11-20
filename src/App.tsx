@@ -2,7 +2,7 @@ import React from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import "./App.css";
 import Editor from "./components/Editor";
-import backgroundImage from "./static/background.jpg";
+import backgroundImage from "./static/background-min.jpg";
 
 const AppWrapper = styled.div<{ backgroundImg: string }>`
   text-align: center;
