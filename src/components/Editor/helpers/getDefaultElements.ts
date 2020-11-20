@@ -1,4 +1,4 @@
-import { Position } from "react-flow-renderer";
+import { Position, Node } from "react-flow-renderer";
 import { CustomNode } from "../../../types/CustomNode";
 import { defaultEdgeStyle } from "../../../util/defaultEdgeStyle";
 
