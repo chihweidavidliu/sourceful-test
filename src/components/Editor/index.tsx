@@ -24,9 +24,10 @@ import { Button, ButtonGroup } from "../Button";
 import CustomMiniMap from "../MiniMap";
 import { findLastIndex } from "../../util/findLastIndex";
 import { defaultEdgeStyle } from "../../util/defaultEdgeStyle";
+import Tips from "../Tips";
 
 const EditorWrapper = styled.div`
-  height: 82vh;
+  height: 80vh;
   width: 95vw;
   margin: 0 auto;
   border: 1px solid lightgrey;
@@ -43,8 +44,8 @@ const H1 = styled.h1`
 
 const Toolbar = styled.div`
   padding: 15px;
-  height: 15vh;
-  max-height: 15vh;
+  height: 18vh;
+  max-height: 18vh;
   overflow: hidden;
   color: white;
   display: flex;
@@ -320,6 +321,8 @@ const Editor = () => {
           <Button onClick={addWeightedAttribute}>Add Attribute</Button>
           <Button onClick={addOption}>Add Option</Button>
         </ButtonGroup>
+
+        <Tips />
       </Toolbar>
 
       <EditorWrapper>
