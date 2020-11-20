@@ -165,6 +165,7 @@ const Editor = () => {
   const addOption = () => {
     const id = shortid.generate();
 
+    // get last created option to determine position of new option
     const lastOption = elements.find(
       (element) => element.type === CustomNode.OPTION
     ) as Node;
@@ -223,6 +224,7 @@ const Editor = () => {
   const addWeightedAttribute = () => {
     const id = shortid.generate();
 
+    // get last created weighted attribute to determine position of new attribute
     const lastWeightedAttribute = elements.find(
       (element) => element.type === CustomNode.WEIGHTED_ATTRIBUTE
     ) as Node;
