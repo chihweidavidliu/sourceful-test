@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import omit from "lodash.omit";
 import shortid from "shortid";
 import ReactFlow, {
   Edge,
@@ -10,7 +9,6 @@ import ReactFlow, {
   Connection,
   Background,
   isEdge,
-  FlowElement,
   useZoomPanHelper,
 } from "react-flow-renderer";
 import styled from "styled-components";
@@ -23,12 +21,11 @@ import { IOptionProps } from "../Option";
 import { IWeightedAttributeProps } from "../WeightedAttribute";
 import { Button, ButtonGroup } from "../Button";
 import CustomMiniMap from "../MiniMap";
-import { findLastIndex } from "../../util/findLastIndex";
-import { defaultEdgeStyle } from "../../util/defaultEdgeStyle";
 import Tips from "../Tips";
 import { shiftNodesOnDelete } from "./shiftNodesOnDelete";
 import { updateNodePosition } from "./updateNodePosition";
 import { addEdgesOnCreate } from "./addEdgesOnCreate";
+import { getLastElementByType } from "./getLastElementByType";
 
 const EditorWrapper = styled.div`
   height: 80vh;
@@ -123,7 +120,9 @@ const Editor = () => {
       setAttributeScore,
     })
   );
+
   const { fitView } = useZoomPanHelper();
+  console.log("elements", elements);
 
   // fit graph into view on load
   useEffect(() => {
@@ -164,17 +163,6 @@ const Editor = () => {
   const onConnect = (params: Edge | Connection) =>
     setElements((els) => addEdge(params, els));
 
-  const getLastElementByType = (type: CustomNode) => {
-    const lastIndex = findLastIndex<FlowElement>(
-      elements,
-      (element: FlowElement) => {
-        return element.type === type;
-      }
-    );
-    const lastElement = elements[lastIndex] as Node;
-    return lastElement;
-  };
-
   const addOption = () => {
     const id = shortid.generate();
 
@@ -194,7 +182,10 @@ const Editor = () => {
     );
 
     // get last created option to determine position of new option
-    const lastOption = getLastElementByType(CustomNode.OPTION);
+    const lastOption = getLastElementByType(
+      elements,
+      CustomNode.OPTION
+    ) as Node;
 
     const newOption: IOptionProps = {
       id: id,
@@ -211,14 +202,16 @@ const Editor = () => {
       },
     };
 
+    // add new option
     setElements((elements) => [...elements, newOption]);
 
+    // add edges
     setElements((elements) => {
-      // add edges
       const newEdges = addEdgesOnCreate(elements, newOption);
       return [...elements, ...newEdges];
     });
 
+    // adjust view
     fitView();
   };
 
@@ -248,8 +241,9 @@ const Editor = () => {
 
     // get last created weighted attribute to determine position of new attribute
     const lastWeightedAttribute = getLastElementByType(
+      elements,
       CustomNode.WEIGHTED_ATTRIBUTE
-    );
+    ) as Node;
 
     const newAttribute: IWeightedAttributeProps = {
       id,
@@ -298,7 +292,6 @@ const Editor = () => {
           snapToGrid={true}
           snapGrid={[15, 15]}
           defaultZoom={0.8}
-          nodesDraggable={false}
         >
           <CustomMiniMap />
           <Background color="#aaa" gap={16} />
