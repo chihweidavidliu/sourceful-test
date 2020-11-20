@@ -122,7 +122,6 @@ const Editor = () => {
   );
 
   const { fitView } = useZoomPanHelper();
-  console.log("elements", elements);
 
   // fit graph into view on load
   useEffect(() => {
