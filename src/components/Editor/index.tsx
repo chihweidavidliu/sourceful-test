@@ -327,7 +327,6 @@ const Editor = () => {
           elements={elements}
           onElementsRemove={onElementsRemove}
           onConnect={onConnect}
-          deleteKeyCode={8} /* 'delete'-key */
           snapToGrid={true}
           snapGrid={[15, 15]}
           defaultZoom={0.8}
