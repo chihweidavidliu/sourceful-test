@@ -26,6 +26,9 @@ import CustomMiniMap from "../MiniMap";
 import { findLastIndex } from "../../util/findLastIndex";
 import { defaultEdgeStyle } from "../../util/defaultEdgeStyle";
 import Tips from "../Tips";
+import { shiftNodesOnDelete } from "./shiftNodesOnDelete";
+import { updateNodePosition } from "./updateNodePosition";
+import { addEdgesOnCreate } from "./addEdgesOnCreate";
 
 const EditorWrapper = styled.div`
   height: 80vh;
@@ -130,7 +133,7 @@ const Editor = () => {
   const onElementsRemove = (elementsToRemove: Elements) => {
     const nodeToRemove = elementsToRemove.find((element) => !isEdge(element));
 
-    const indexInElements = nodeToRemove
+    const indexOfNodeToDelete = nodeToRemove
       ? elements.findIndex((element) => element.id === nodeToRemove.id)
       : -1;
 
@@ -141,90 +144,17 @@ const Editor = () => {
     if (nodeToRemove?.type === CustomNode.WEIGHTED_ATTRIBUTE) {
       // remove attribute from all option nodes and move results down
       setElements((elements) =>
-        elements.map((element, index) => {
-          if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
-            const attributeNode = element as Node;
-            // shift all attribute nodes to the left of the deleted node to the right
-            if (index < indexInElements) {
-              return {
-                ...attributeNode,
-                position: {
-                  ...attributeNode.position,
-                  x: attributeNode.position.x + 150,
-                },
-              };
-            } else if (index > indexInElements) {
-              // shift all attribute nodes to the right of the deleted node to the left
-              return {
-                ...attributeNode,
-                position: {
-                  ...attributeNode.position,
-                  x: attributeNode.position.x - 150,
-                },
-              };
-            }
-            return attributeNode;
-          }
-
-          if (element.type === CustomNode.OPTION) {
-            const updatedWeightings = omit(
-              element.data.weightings,
-              nodeToRemove.id
-            );
-            return {
-              ...element,
-              data: {
-                ...element.data,
-                weightings: updatedWeightings,
-              },
-            };
-          }
-
-          if (element.type === CustomNode.RESULT) {
-            const resultElement = element as Node;
-            return {
-              ...element,
-              position: {
-                x: resultElement.position.x,
-                y: resultElement.position.y - 70,
-              },
-            };
-          }
-
-          return element;
-        })
+        shiftNodesOnDelete(
+          elements,
+          indexOfNodeToDelete,
+          CustomNode.WEIGHTED_ATTRIBUTE
+        )
       );
     }
 
     if (nodeToRemove?.type === CustomNode.OPTION) {
       setElements((elements) =>
-        elements.map((element, index) => {
-          if (element.type === CustomNode.OPTION) {
-            const optionNode = element as Node;
-            // shift all option nodes to the left of the deleted node to the right
-            if (index < indexInElements) {
-              return {
-                ...optionNode,
-                position: {
-                  ...optionNode.position,
-                  x: optionNode.position.x + 150,
-                },
-              };
-            } else if (index > indexInElements) {
-              // shift all option nodes to the right of the deleted node to the left
-              return {
-                ...optionNode,
-                position: {
-                  ...optionNode.position,
-                  x: optionNode.position.x - 150,
-                },
-              };
-            }
-            return optionNode;
-          }
-
-          return element;
-        })
+        shiftNodesOnDelete(elements, indexOfNodeToDelete, CustomNode.OPTION)
       );
     }
 
@@ -253,13 +183,10 @@ const Editor = () => {
         // shift existing options left
         if (element.type === CustomNode.OPTION) {
           const optionNode = element as Node;
-          return {
-            ...element,
-            position: {
-              ...optionNode.position,
-              x: optionNode.position.x - 150,
-            },
-          };
+
+          return updateNodePosition(optionNode, {
+            x: optionNode.position.x - 150,
+          });
         }
 
         return element;
@@ -288,38 +215,7 @@ const Editor = () => {
 
     setElements((elements) => {
       // add edges
-      const newEdges: Edge[] = elements
-        .filter(
-          (element) =>
-            element.type === CustomNode.WEIGHTED_ATTRIBUTE ||
-            element.type === CustomNode.RESULT
-        )
-        .map((element) => {
-          const edgeId = shortid.generate();
-
-          if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
-            return {
-              id: edgeId,
-              source: element.id,
-              target: newOption.id,
-              sourceHandle: "a",
-              targetHandle: "a",
-              animated: true,
-              style: defaultEdgeStyle,
-            };
-          }
-
-          return {
-            id: edgeId,
-            source: newOption.id,
-            target: element.id,
-            sourceHandle: "b",
-            targetHandle: "a",
-            animated: true,
-            style: defaultEdgeStyle,
-          };
-        });
-
+      const newEdges = addEdgesOnCreate(elements, newOption);
       return [...elements, ...newEdges];
     });
 
@@ -334,27 +230,17 @@ const Editor = () => {
         // shift existing attributes left
         if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
           const attributeNode = element as Node;
-          return {
-            ...element,
-            position: {
-              ...attributeNode.position,
-              x: attributeNode.position.x - 150,
-            },
-          };
+          return updateNodePosition(attributeNode, {
+            x: attributeNode.position.x - 150,
+          });
         }
 
         // shift result down
         if (element.type === CustomNode.RESULT) {
           const resultNode = element as Node;
-          const updatedNode: Node = {
-            ...element,
-            position: {
-              x: resultNode.position.x,
-              y: resultNode.position.y + 70,
-            },
-          };
-
-          return updatedNode;
+          return updateNodePosition(resultNode, {
+            y: resultNode.position.y + 70,
+          });
         }
         return element;
       })
@@ -385,22 +271,7 @@ const Editor = () => {
 
     setElements((elements) => {
       // add edges
-      const options = elements.filter(
-        (element) => element.type === CustomNode.OPTION
-      );
-
-      const newEdges = options.map((option) => {
-        return {
-          id: shortid.generate(),
-          source: id,
-          target: option.id,
-          sourceHandle: "a",
-          targetHandle: "a",
-          animated: true,
-          style: defaultEdgeStyle,
-        };
-      });
-
+      const newEdges = addEdgesOnCreate(elements, newAttribute);
       return [...elements, ...newEdges];
     });
 
