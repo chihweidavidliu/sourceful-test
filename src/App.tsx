@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactFlowProvider } from "react-flow-renderer";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import "./App.css";
 import Editor from "./components/Editor";
@@ -47,9 +48,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <AppWrapper backgroundImg={backgroundImage}>
-        <Editor />
-      </AppWrapper>
+      <ReactFlowProvider>
+        <AppWrapper backgroundImg={backgroundImage}>
+          <Editor />
+        </AppWrapper>
+      </ReactFlowProvider>
     </ThemeProvider>
   );
 }

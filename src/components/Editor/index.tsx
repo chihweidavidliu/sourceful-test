@@ -11,6 +11,7 @@ import ReactFlow, {
   Background,
   isEdge,
   FlowElement,
+  useZoomPanHelper,
 } from "react-flow-renderer";
 import styled from "styled-components";
 import WeightedAttribute from "../WeightedAttribute";
@@ -60,8 +61,6 @@ const nodeTypes = {
 };
 
 const Editor = () => {
-  const [elements, setElements] = useState<Elements>([]);
-
   const handleChange = (
     id: string,
     event: React.ChangeEvent<HTMLInputElement>
@@ -115,36 +114,62 @@ const Editor = () => {
     );
   };
 
+  const [elements, setElements] = useState<Elements>(
+    getDefaultElements({
+      handleChange,
+      setAttributeScore,
+    })
+  );
+  const { fitView } = useZoomPanHelper();
+
+  // fit graph into view on load
   useEffect(() => {
-    setElements(
-      getDefaultElements({
-        handleChange,
-        setAttributeScore,
-      })
-    );
-  }, []);
+    fitView();
+  }, [fitView]);
 
   const onElementsRemove = (elementsToRemove: Elements) => {
-    const resultNode = elementsToRemove.find(
-      (element) => element?.type === CustomNode.RESULT
-    );
+    const nodeToRemove = elementsToRemove.find((element) => !isEdge(element));
 
-    if (resultNode) {
+    const indexInElements = nodeToRemove
+      ? elements.findIndex((element) => element.id === nodeToRemove.id)
+      : -1;
+
+    if (nodeToRemove?.type === CustomNode.RESULT) {
       return alert("Cannot delete result node");
     }
 
-    const weightedAttribute = elementsToRemove.find(
-      (element) => element?.type === CustomNode.WEIGHTED_ATTRIBUTE
-    );
-
-    if (weightedAttribute) {
+    if (nodeToRemove?.type === CustomNode.WEIGHTED_ATTRIBUTE) {
       // remove attribute from all option nodes and move results down
       setElements((elements) =>
-        elements.map((element) => {
+        elements.map((element, index) => {
+          if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
+            const attributeNode = element as Node;
+            // shift all attribute nodes to the left of the deleted node to the right
+            if (index < indexInElements) {
+              return {
+                ...attributeNode,
+                position: {
+                  ...attributeNode.position,
+                  x: attributeNode.position.x + 150,
+                },
+              };
+            } else if (index > indexInElements) {
+              // shift all attribute nodes to the right of the deleted node to the left
+              return {
+                ...attributeNode,
+                position: {
+                  ...attributeNode.position,
+                  x: attributeNode.position.x - 150,
+                },
+              };
+            }
+            return attributeNode;
+          }
+
           if (element.type === CustomNode.OPTION) {
             const updatedWeightings = omit(
               element.data.weightings,
-              weightedAttribute.id
+              nodeToRemove.id
             );
             return {
               ...element,
@@ -164,6 +189,38 @@ const Editor = () => {
                 y: resultElement.position.y - 70,
               },
             };
+          }
+
+          return element;
+        })
+      );
+    }
+
+    if (nodeToRemove?.type === CustomNode.OPTION) {
+      setElements((elements) =>
+        elements.map((element, index) => {
+          if (element.type === CustomNode.OPTION) {
+            const optionNode = element as Node;
+            // shift all option nodes to the left of the deleted node to the right
+            if (index < indexInElements) {
+              return {
+                ...optionNode,
+                position: {
+                  ...optionNode.position,
+                  x: optionNode.position.x + 150,
+                },
+              };
+            } else if (index > indexInElements) {
+              // shift all option nodes to the right of the deleted node to the left
+              return {
+                ...optionNode,
+                position: {
+                  ...optionNode.position,
+                  x: optionNode.position.x - 150,
+                },
+              };
+            }
+            return optionNode;
           }
 
           return element;
@@ -191,6 +248,24 @@ const Editor = () => {
   const addOption = () => {
     const id = shortid.generate();
 
+    setElements((elements) =>
+      elements.map((element) => {
+        // shift existing options left
+        if (element.type === CustomNode.OPTION) {
+          const optionNode = element as Node;
+          return {
+            ...element,
+            position: {
+              ...optionNode.position,
+              x: optionNode.position.x - 150,
+            },
+          };
+        }
+
+        return element;
+      })
+    );
+
     // get last created option to determine position of new option
     const lastOption = getLastElementByType(CustomNode.OPTION);
 
@@ -204,7 +279,7 @@ const Editor = () => {
         scores: {},
       },
       position: {
-        x: lastOption ? lastOption.position.x + 300 : 100,
+        x: lastOption ? lastOption.position.x + 150 : 100,
         y: lastOption ? lastOption.position.y : 300,
       },
     };
@@ -247,10 +322,43 @@ const Editor = () => {
 
       return [...elements, ...newEdges];
     });
+
+    fitView();
   };
 
   const addWeightedAttribute = () => {
     const id = shortid.generate();
+
+    setElements((elements) =>
+      elements.map((element) => {
+        // shift existing attributes left
+        if (element.type === CustomNode.WEIGHTED_ATTRIBUTE) {
+          const attributeNode = element as Node;
+          return {
+            ...element,
+            position: {
+              ...attributeNode.position,
+              x: attributeNode.position.x - 150,
+            },
+          };
+        }
+
+        // shift result down
+        if (element.type === CustomNode.RESULT) {
+          const resultNode = element as Node;
+          const updatedNode: Node = {
+            ...element,
+            position: {
+              x: resultNode.position.x,
+              y: resultNode.position.y + 70,
+            },
+          };
+
+          return updatedNode;
+        }
+        return element;
+      })
+    );
 
     // get last created weighted attribute to determine position of new attribute
     const lastWeightedAttribute = getLastElementByType(
@@ -267,7 +375,7 @@ const Editor = () => {
       },
       position: {
         x: lastWeightedAttribute
-          ? lastWeightedAttribute?.position.x + 300
+          ? lastWeightedAttribute?.position.x + 150
           : 100,
         y: lastWeightedAttribute ? lastWeightedAttribute?.position.y : 50,
       },
@@ -296,21 +404,7 @@ const Editor = () => {
       return [...elements, ...newEdges];
     });
 
-    // move results down
-    setElements((elements) =>
-      elements.map((element) => {
-        if (isEdge(element) || element.type !== CustomNode.RESULT) {
-          return element;
-        }
-
-        const updatedNode: Node = {
-          ...element,
-          position: { x: element.position.x, y: element.position.y + 70 },
-        };
-
-        return updatedNode;
-      })
-    );
+    fitView();
   };
 
   return (
@@ -321,7 +415,6 @@ const Editor = () => {
           <Button onClick={addWeightedAttribute}>Add Attribute</Button>
           <Button onClick={addOption}>Add Option</Button>
         </ButtonGroup>
-
         <Tips />
       </Toolbar>
 
@@ -334,6 +427,7 @@ const Editor = () => {
           snapToGrid={true}
           snapGrid={[15, 15]}
           defaultZoom={0.8}
+          nodesDraggable={false}
         >
           <CustomMiniMap />
           <Background color="#aaa" gap={16} />
