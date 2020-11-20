@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
-import { IOptionData } from "../Option";
+import { IOptionAttrs } from "../Option";
 import { CustomNode } from "../../types/CustomNode";
 import { Card } from "../Card";
 
@@ -25,12 +25,12 @@ interface ISortedNodes {
   options: Node[];
 }
 
-interface IResultData {
+interface IResultAttrs {
   label: string;
 }
 
 interface IResultProps extends Node {
-  data: IResultData;
+  data: IResultAttrs;
   selected?: boolean;
 }
 
@@ -75,7 +75,7 @@ const Result = ({ selected }: IResultProps) => {
     return winner;
   };
 
-  const calculateTotalScore = (optionData: IOptionData) => {
+  const calculateTotalScore = (optionData: IOptionAttrs) => {
     const { scores } = optionData;
 
     const total = sortedNodes.weightedAttributes.reduce((total, attribute) => {

@@ -21,7 +21,7 @@ const Score = styled.div`
   font-size: 24px;
 `;
 
-export interface IOptionData {
+export interface IOptionAttrs {
   label: string;
   scores: {
     [attributeId: string]: number;
@@ -34,7 +34,7 @@ export interface IOptionData {
 }
 
 export interface IOptionProps extends Node {
-  data: IOptionData;
+  data: IOptionAttrs;
   selected?: boolean;
 }
 

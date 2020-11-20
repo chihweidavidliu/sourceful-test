@@ -7,14 +7,14 @@ import RangeInput from "../RangeInput";
 
 const WeightedAttributeWrapper = styled(Card)``;
 
-interface IWeightedAttributeData {
+interface IWeightedAttributeAttrs {
   label: string;
   weighting: number;
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface IWeightedAttributeProps extends Node {
-  data: IWeightedAttributeData;
+  data: IWeightedAttributeAttrs;
   selected?: boolean;
 }
 
