@@ -16,7 +16,7 @@ const Label = styled.div`
 `;
 
 const Winner = styled.div`
-  font-size: 30px;
+  font-size: 28px;
   color: ${({ theme }) => theme.darkAccentColour};
   font-weight: bold;
 `;

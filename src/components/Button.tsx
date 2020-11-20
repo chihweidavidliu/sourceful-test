@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Button = styled.button`
   font-family: "Ubuntu", sans-serif;
   font-size: 14px;
-  padding: 0px 9px;
+  padding: 9px;
   background: white;
   border: 0;
   border: 2px solid white;
@@ -30,7 +30,7 @@ export const ButtonGroup = styled.div`
   display: flex;
   flex-shrink: 0;
   min-height: 40px;
-  width: 220px;
+  width: 230px;
   justify-content: space-between;
   margin: 0 auto;
 `;
