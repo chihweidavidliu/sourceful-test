@@ -6,7 +6,9 @@ export const Card = styled.div<{ isSelected?: boolean }>`
   padding: 15px;
   display: grid;
   grid-gap: 10px;
-  border: 1px solid ${({ isSelected }) => (isSelected ? "teal" : "lightgrey")};
+  border: 1px solid
+    ${({ isSelected, theme }) =>
+      isSelected ? theme.darkAccentColour : "lightgrey"};
   border-radius: 4px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 `;
