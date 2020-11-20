@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
 import { Card } from "../Card";
@@ -26,20 +26,21 @@ export interface IOptionAttrs {
   scores: {
     [attributeId: string]: number;
   };
-  handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
-  setAttributeScore: (
-    id: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
+  updateNode: (updated: Node) => void;
 }
 
 export interface IOptionProps extends Node {
   data: IOptionAttrs;
   selected?: boolean;
+  xPos?: number;
+  yPos?: number;
 }
 
-const Option = ({ id, data, selected }: IOptionProps) => {
-  const { scores, handleChange, setAttributeScore } = data;
+const Option = (props: IOptionProps) => {
+  const { data, selected } = props;
+  const { scores, updateNode } = data;
+  const [label, setLabel] = useState(data.label);
+
   const nodes = useStoreState((state) => state.nodes);
 
   const weightedAttributes = nodes.filter(
@@ -56,6 +57,35 @@ const Option = ({ id, data, selected }: IOptionProps) => {
     return total.toFixed(1);
   };
 
+  const handleUpdate = (field: "label" | "score", value: string | number) => {
+    const updated: Node = {
+      ...props,
+      position: { x: props.xPos!, y: props.yPos! }, // reconstitue missing position object
+      data: {
+        ...data,
+        [field]: value,
+      },
+    };
+
+    updateNode(updated);
+  };
+
+  const handleScoreUpdate = (attributeId: string, score: number) => {
+    const updated: Node = {
+      ...props,
+      position: { x: props.xPos!, y: props.yPos! }, // reconstitue missing position object
+      data: {
+        ...data,
+        scores: {
+          ...data.scores,
+          [attributeId]: score,
+        },
+      },
+    };
+
+    updateNode(updated);
+  };
+
   return (
     <OptionWrapper isSelected={selected}>
       <Handle
@@ -69,11 +99,12 @@ const Option = ({ id, data, selected }: IOptionProps) => {
         className="nodrag"
         type="text"
         placeholder="Enter option name"
-        value={data.label}
+        value={label}
         name="label"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChange(id, e)
+          setLabel(e.target.value)
         }
+        onBlur={() => handleUpdate("label", label)}
       />
 
       <div>
@@ -90,9 +121,12 @@ const Option = ({ id, data, selected }: IOptionProps) => {
                     min={0}
                     max={100}
                     value={score}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setAttributeScore(id, e);
-                    }}
+                    onMouseUp={(e) =>
+                      handleScoreUpdate(
+                        attributeId,
+                        Number(e.currentTarget.value)
+                      )
+                    }
                   />
                 );
               }

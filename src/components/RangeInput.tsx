@@ -1,4 +1,4 @@
-import React, { HTMLProps } from "react";
+import React, { MouseEvent, useState } from "react";
 import styled from "styled-components";
 
 const RangeInputWrapper = styled.div`
@@ -8,17 +8,31 @@ const RangeInputWrapper = styled.div`
   cursor: default;
 `;
 
-interface IRangeInputProps extends HTMLProps<HTMLInputElement> {
+interface IRangeInputProps {
   label: string;
+  value: number;
+  onMouseUp: (event: MouseEvent<HTMLInputElement>) => void;
+  name: string;
+  min: number;
+  max: number;
+  step?: string;
 }
 
-const RangeInput = ({ label, ...props }: IRangeInputProps) => {
+const RangeInput = ({ label, onMouseUp, ...props }: IRangeInputProps) => {
+  const [score, setScore] = useState(props.value);
+
   return (
     <RangeInputWrapper className="nodrag">
       <div>
         {label}: <strong>{props.value}</strong>
       </div>
-      <input {...props} type="range" />
+      <input
+        {...props}
+        value={score}
+        onChange={(e) => setScore(Number(e.target.value))}
+        onMouseUp={onMouseUp}
+        type="range"
+      />
     </RangeInputWrapper>
   );
 };

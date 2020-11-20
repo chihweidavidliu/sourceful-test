@@ -10,7 +10,6 @@ const WeightedAttributeWrapper = styled(Card)``;
 interface IWeightedAttributeAttrs {
   label: string;
   weighting: number;
-  handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
   updateNode: (updated: Node) => void;
 }
 
@@ -24,7 +23,6 @@ export interface IWeightedAttributeProps extends Node {
 const WeightedAttribute = (props: IWeightedAttributeProps) => {
   const { data, selected } = props;
   const [label, setLabel] = useState(data.label);
-  const [weighting, setWeighting] = useState(data.weighting);
   const { updateNode } = data;
 
   const handleUpdate = (
@@ -64,11 +62,8 @@ const WeightedAttribute = (props: IWeightedAttributeProps) => {
         step="0.1"
         max={1}
         name="weighting"
-        value={weighting}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setWeighting(Number(e.target.value));
-        }}
-        onMouseUp={() => handleUpdate("weighting", weighting)}
+        value={data.weighting}
+        onMouseUp={(e) => handleUpdate("weighting", e.currentTarget.value)}
       />
 
       <Handle

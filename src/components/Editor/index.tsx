@@ -61,63 +61,21 @@ const nodeTypes = {
 };
 
 const Editor = () => {
-  const handleChange = (
-    id: string,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const updateNode = (updatedNode: Node) => {
     setElements((elements) =>
       elements.map((element) => {
-        if (isEdge(element) || element.id !== id) {
+        if (isEdge(element) || element.id !== updatedNode.id) {
           return element;
         }
-        const { name, value } = event.target;
-
-        const updatedNode: Node = {
-          ...element,
-          data: {
-            ...element.data,
-            [name]: value,
-          },
-        };
 
         return updatedNode;
       })
     );
   };
 
-  const setAttributeScore = (
-    id: string,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setElements((elements) =>
-      elements.map((element) => {
-        if (isEdge(element) || element.id !== id) {
-          return element;
-        }
-
-        const attributeId = event.target.name;
-        const attributeScore = event.target.value;
-
-        const updatedScores = {
-          ...element.data.scores,
-          [attributeId]: attributeScore,
-        };
-
-        return {
-          ...element,
-          data: {
-            ...element.data,
-            scores: updatedScores,
-          },
-        };
-      })
-    );
-  };
-
   const [elements, setElements] = useState<Elements>(
     getDefaultElements({
-      handleChange,
-      setAttributeScore,
+      updateNode,
     })
   );
 
@@ -191,8 +149,7 @@ const Editor = () => {
       type: CustomNode.OPTION,
       data: {
         label: "New Option",
-        handleChange,
-        setAttributeScore,
+        updateNode,
         scores: {},
       },
       position: {
@@ -249,7 +206,6 @@ const Editor = () => {
       type: CustomNode.WEIGHTED_ATTRIBUTE,
       data: {
         label: "New Attribute",
-        handleChange,
         updateNode,
         weighting: 1,
       },

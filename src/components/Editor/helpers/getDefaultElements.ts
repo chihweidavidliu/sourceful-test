@@ -3,26 +3,16 @@ import { CustomNode } from "../../../types/CustomNode";
 import { defaultEdgeStyle } from "../../../util/defaultEdgeStyle";
 
 interface IGetDefaultElementsArgs {
-  handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;
-  setAttributeScore: (
-    id: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
   updateNode: (updated: Node) => void;
 }
 
-export const getDefaultElements = ({
-  handleChange,
-  setAttributeScore,
-  updateNode,
-}: IGetDefaultElementsArgs) => {
+export const getDefaultElements = ({ updateNode }: IGetDefaultElementsArgs) => {
   return [
     {
       id: "2",
       type: CustomNode.WEIGHTED_ATTRIBUTE,
       data: {
         label: "New Attribute",
-        handleChange,
         updateNode,
         weighting: 1,
       },
@@ -33,8 +23,7 @@ export const getDefaultElements = ({
       type: CustomNode.OPTION,
       data: {
         label: "Option 1",
-        handleChange,
-        setAttributeScore,
+        updateNode,
         scores: {
           "2": 50,
         },
@@ -47,8 +36,7 @@ export const getDefaultElements = ({
       type: CustomNode.OPTION,
       data: {
         label: "Option 2",
-        handleChange,
-        setAttributeScore,
+        updateNode,
         scores: {
           "2": 50,
         },
