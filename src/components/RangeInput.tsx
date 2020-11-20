@@ -25,7 +25,7 @@ const RangeInput = ({ label, onMouseUp, ...props }: IRangeInputProps) => {
   return (
     <RangeInputWrapper className="nodrag">
       <div>
-        {label}: <strong>{props.value}</strong>
+        {label}: <strong>{score}</strong>
       </div>
       <input
         {...props}
