@@ -1,6 +1,6 @@
 import omit from "lodash.omit";
 import { Elements, Node } from "react-flow-renderer";
-import { CustomNode } from "../../types/CustomNode";
+import { CustomNode } from "../../../types/CustomNode";
 import { updateNodePosition } from "./updateNodePosition";
 
 export const shiftNodesOnDelete = (

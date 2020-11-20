@@ -1,7 +1,7 @@
 import { Elements, Node } from "react-flow-renderer";
 import shortid from "shortid";
-import { CustomNode } from "../../types/CustomNode";
-import { defaultEdgeStyle } from "../../util/defaultEdgeStyle";
+import { CustomNode } from "../../../types/CustomNode";
+import { defaultEdgeStyle } from "../../../util/defaultEdgeStyle";
 
 export const addEdgesOnCreate = (elements: Elements, newNode: Node) => {
   switch (newNode.type) {

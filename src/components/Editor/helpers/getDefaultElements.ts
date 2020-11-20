@@ -1,6 +1,6 @@
 import { Position } from "react-flow-renderer";
-import { CustomNode } from "../../types/CustomNode";
-import { defaultEdgeStyle } from "../../util/defaultEdgeStyle";
+import { CustomNode } from "../../../types/CustomNode";
+import { defaultEdgeStyle } from "../../../util/defaultEdgeStyle";
 
 interface IGetDefaultElementsArgs {
   handleChange: (id: string, e: React.ChangeEvent<HTMLInputElement>) => void;

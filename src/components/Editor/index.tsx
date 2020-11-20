@@ -16,16 +16,16 @@ import WeightedAttribute from "../WeightedAttribute";
 import Option from "../Option";
 import Result from "../Result";
 import { CustomNode } from "../../types/CustomNode";
-import { getDefaultElements } from "./getDefaultElements";
+import { getDefaultElements } from "./helpers/getDefaultElements";
 import { IOptionProps } from "../Option";
 import { IWeightedAttributeProps } from "../WeightedAttribute";
 import { Button, ButtonGroup } from "../Button";
 import CustomMiniMap from "../MiniMap";
 import Tips from "../Tips";
-import { shiftNodesOnDelete } from "./shiftNodesOnDelete";
-import { updateNodePosition } from "./updateNodePosition";
-import { addEdgesOnCreate } from "./addEdgesOnCreate";
-import { getLastElementByType } from "./getLastElementByType";
+import { shiftNodesOnDelete } from "./helpers/shiftNodesOnDelete";
+import { updateNodePosition } from "./helpers/updateNodePosition";
+import { addEdgesOnCreate } from "./helpers/addEdgesOnCreate";
+import { getLastElementByType } from "./helpers/getLastElementByType";
 
 const EditorWrapper = styled.div`
   height: 80vh;
