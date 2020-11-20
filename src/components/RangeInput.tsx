@@ -19,6 +19,7 @@ interface IRangeInputProps {
 }
 
 const RangeInput = ({ label, onMouseUp, ...props }: IRangeInputProps) => {
+  // hold score changes in local state and update editor state onMouseUp to prevent unnecessary rerenders
   const [score, setScore] = useState(props.value);
 
   return (
