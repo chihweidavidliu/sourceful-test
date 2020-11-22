@@ -38,7 +38,6 @@ export const StyledCard = styled(Card)<ITooltipProps>`
     }
 
     to {
-      top: ${({ yPos }) => yPos + 'px'};
       opacity: 1;
     }
   }
