@@ -7,6 +7,7 @@ export const StyledInput = styled.input`
   font-size: 18px;
   border-bottom: 1px solid lightgrey;
   font-weight: bold;
+  text-overflow: ellipsis;
 `;
 
 export const TextInput = ({ ...props }: HTMLProps<HTMLInputElement>) => {
@@ -21,7 +22,9 @@ export const TextInput = ({ ...props }: HTMLProps<HTMLInputElement>) => {
   return (
     <StyledInput
       {...props}
+      title={props.value as string}
       ref={inputRef}
+      maxLength={25}
       as={"input"}
       onKeyDown={blurOnEnter}
     />

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Card = styled.div<{ isSelected?: boolean }>`
   background: white;
-  min-width: 100px;
+  min-width: 250px;
   padding: 15px;
   display: grid;
   grid-gap: 10px;

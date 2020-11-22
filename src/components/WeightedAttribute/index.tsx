@@ -29,7 +29,6 @@ const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
         placeholder="Enter attribute name"
         value={data.label}
         name="label"
-        maxLength={20}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handleChange(id, e)
         }
