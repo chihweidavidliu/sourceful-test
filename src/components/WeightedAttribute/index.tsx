@@ -25,13 +25,9 @@ const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { handleChange, setAttributeWeighting } = data;
 
-  const position = wrapperRef.current?.getBoundingClientRect();
-  const xPos = position?.x!;
-  const yPos = position?.y! - 90;
-
   return (
     <>
-    <Tooltip isVisible={isHovered} xPos={xPos} yPos={yPos}>{data.label}</Tooltip>
+    <Tooltip isVisible={isHovered && data.label.length > 23}>{data.label}</Tooltip>
     <WeightedAttributeWrapper isSelected={selected} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} ref={wrapperRef}>
       <TextInput
         className="nodrag"

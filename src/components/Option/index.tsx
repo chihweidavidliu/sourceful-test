@@ -57,13 +57,10 @@ const Option = ({ id, data, selected }: IOptionProps) => {
     return total.toFixed(1);
   };
 
-  const position = wrapperRef.current?.getBoundingClientRect();
-  const xPos = position?.x!;
-  const yPos = position?.y! - 90;
 
   return (
     <>
-    <Tooltip isVisible={isHovered} xPos={xPos} yPos={yPos}>{data.label}</Tooltip>
+    <Tooltip isVisible={isHovered && data.label.length > 23}>{data.label}</Tooltip>
     <OptionWrapper isSelected={selected} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} ref={wrapperRef}>
       <Handle
         type="target"

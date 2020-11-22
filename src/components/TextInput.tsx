@@ -20,8 +20,6 @@ export const TextInput = ({ ...props }: HTMLProps<HTMLInputElement>) => {
   };
 
   return (
-    <>
-
       <StyledInput
         {...props}
         maxLength={40}
@@ -30,6 +28,5 @@ export const TextInput = ({ ...props }: HTMLProps<HTMLInputElement>) => {
         onKeyDown={blurOnEnter}
 
       />
-    </>
   );
 };
