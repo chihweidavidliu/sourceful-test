@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Handle, Position, Node, useStoreState } from "react-flow-renderer";
 import { Card } from "../Card";
 import { CustomNode } from "../../types/CustomNode";
 import { TextInput } from "../TextInput";
 import RangeInput from "../RangeInput";
+import Tooltip from "../Tooltip";
 
 const OptionWrapper = styled(Card)``;
 
@@ -36,6 +37,9 @@ export interface IOptionProps extends Node {
 }
 
 const Option = ({ id, data, selected }: IOptionProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
   const { scores, handleChange, setAttributeScore } = data;
   const nodes = useStoreState((state) => state.nodes);
 
@@ -53,8 +57,14 @@ const Option = ({ id, data, selected }: IOptionProps) => {
     return total.toFixed(1);
   };
 
+  const position = wrapperRef.current?.getBoundingClientRect();
+  const xPos = position?.x!;
+  const yPos = position?.y! - 90;
+
   return (
-    <OptionWrapper isSelected={selected}>
+    <>
+    <Tooltip isVisible={isHovered} xPos={xPos} yPos={yPos}>{data.label}</Tooltip>
+    <OptionWrapper isSelected={selected} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} ref={wrapperRef}>
       <Handle
         type="target"
         position={Position.Top}
@@ -112,6 +122,7 @@ const Option = ({ id, data, selected }: IOptionProps) => {
         isConnectable={false}
       />
     </OptionWrapper>
+    </>
   );
 };
 

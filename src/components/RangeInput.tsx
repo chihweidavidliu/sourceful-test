@@ -11,6 +11,20 @@ const RangeInputWrapper = styled.div`
   cursor: default;
 `;
 
+
+const LabelWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const Label = styled.div`
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 8px;
+`
+
 interface IRangeInputProps extends SliderProps {
   label: string;
 }
@@ -18,9 +32,9 @@ interface IRangeInputProps extends SliderProps {
 const RangeInput = ({ label, ...props }: IRangeInputProps) => {
   return (
     <RangeInputWrapper className="nodrag">
-      <div>
-        {label}: <strong>{props.value}</strong>
-      </div>
+      <LabelWrapper>
+        <Label>{label}:</Label> <strong>{props.value}</strong>
+      </LabelWrapper>
       <Slider
         {...props}
         trackStyle={{ background: "#EF4158" }}

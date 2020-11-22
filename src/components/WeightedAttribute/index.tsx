@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Handle, Position, Node } from "react-flow-renderer";
 import { Card } from "../Card";
 import { TextInput } from "../TextInput";
 import RangeInput from "../RangeInput";
+import  Tooltip  from "../Tooltip";
 
 const WeightedAttributeWrapper = styled(Card)``;
 
@@ -20,16 +21,24 @@ export interface IWeightedAttributeProps extends Node {
 }
 
 const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const { handleChange, setAttributeWeighting } = data;
+
+  const position = wrapperRef.current?.getBoundingClientRect();
+  const xPos = position?.x!;
+  const yPos = position?.y! - 90;
+
   return (
-    <WeightedAttributeWrapper isSelected={selected}>
+    <>
+    <Tooltip isVisible={isHovered} xPos={xPos} yPos={yPos}>{data.label}</Tooltip>
+    <WeightedAttributeWrapper isSelected={selected} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} ref={wrapperRef}>
       <TextInput
         className="nodrag"
         type="text"
         placeholder="Enter attribute name"
         value={data.label}
         name="label"
-        maxLength={20}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handleChange(id, e)
         }
@@ -54,6 +63,7 @@ const WeightedAttribute = ({ id, data, selected }: IWeightedAttributeProps) => {
         isConnectable={false}
       />
     </WeightedAttributeWrapper>
+    </>
   );
 };
 

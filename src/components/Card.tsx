@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Card = styled.div<{ isSelected?: boolean }>`
+  position: relative;
   background: white;
   min-width: 100px;
   padding: 15px;
